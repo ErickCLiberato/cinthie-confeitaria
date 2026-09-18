@@ -3,14 +3,15 @@
 
 ## Metadados
 
-- **Integrantes e RGM:** Douglas Lourenço de Lima RGM: 47892919
+- **Integrantes e RGM:**
+- Douglas Lourenço de Lima RGM: 47892919
 - Erick Costa Liberato RGM: 48201693
 - Giovanna Pereira Bispo da Silva RGM: 48065285
 - João Lucas Moreira dos Reis RGM: 48162086
 - Nicolas Nogueira Borges RGM: 48329266
-- 
+###
 - **Disciplina:** Modelagem de Banco de Dados
-- 
+###
 - **Organização analisada:** Cinthiê Confeitaria
 
 ---
@@ -39,7 +40,7 @@ A Cinthiê Confeitaria foi escolhida por sua presença na região e pela frequê
 
 ### Evidências da organização
 
-_Inserir pelo grupo ao menos uma evidência da organização e do levantamento de campo: foto da fachada ou da visita, link do Google Maps ou rede social oficial, endereço e forma de contato._
+![Sucesso1](assets/imagem.jpeg)
 
 ---
 
