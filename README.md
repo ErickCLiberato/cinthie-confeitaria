@@ -100,7 +100,7 @@ Os processos de negócio identificados foram:
 
 ---
 
-## 5. Dicionário de Dados Conceitual (Preliminar)
+## 5. Dicionário de Dados Conceitual
 
 ### CLIENTE
 
@@ -203,7 +203,7 @@ O diagrama conceitual utiliza a notação de Chen e apresenta as entidades, atri
 
 > Inserir no repositório a imagem `diagramas/der_conceitual_cinthie_confeitaria_fundo_branco.png` e ajustar o caminho abaixo, se necessário.
 
-![DER conceitual da Cinthiê Confeitaria](diagramas/der_conceitual_cinthie_confeitaria_fundo_branco.png)
+![Sucesso2](assets/der_conceitual_cinthie_confeitaria_fundo_branco.png)
 
 ---
 
@@ -232,9 +232,3 @@ Os atributos `subtotal` e `total_pedido` são derivados, pois podem ser calculad
 | Trechos rejeitados ou corrigidos | Foram rejeitadas sugestões que adicionavam entidades sem confirmação, como estoque, ingredientes, fornecedor, categoria, entrega e entregador. |
 | Justificativa da escolha final | O grupo manteve apenas as decisões compatíveis com a entrevista realizada com o gerente. |
 | Reflexão crítica | A IA foi usada como apoio de organização e revisão. O grupo verificou as sugestões e corrigiu informações que não estavam confirmadas pela entrevista, como o tratamento do WhatsApp como canal de pedido e não como plataforma. |
-
----
-
-## Próximas Etapas
-
-Para a Entrega 2, o grupo deverá converter este modelo conceitual em modelo lógico relacional, definir PKs e FKs, normalizar as tabelas, criar o script SQL, elaborar massa de dados fictícia, executar consultas e documentar os resultados no repositório GitHub.
