@@ -116,70 +116,7 @@ Os processos de negócio identificados foram:
 
 ---
 
-## 5. Dicionário de Dados
-
-### CLIENTE
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| id_cliente | Identificador único do cliente. | Chave primária da entidade. |
-| nome | Nome do cliente. | Utilizado para identificação. |
-| telefone | Número de telefone utilizado no contato, inclusive pelo WhatsApp. | Pode ser utilizado para atendimento e contato. |
-
-### FUNCIONARIO
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| id_funcionario | Identificador único do funcionário. | Chave primária da entidade. |
-| nome | Nome do funcionário. | Utilizado para identificação. |
-| funcao | Função ou combinação de funções exercidas pelo funcionário. | Foram identificados os valores gerente/confeiteira, ajudante de cozinha/atendimento no balcão e motoboy/entregador. |
-
-### PRODUTO
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| id_produto | Identificador único do produto. | Chave primária da entidade. |
-| nome_produto | Nome do produto comercializado. | Identifica o produto oferecido pela confeitaria. |
-| preco | Preço atual do produto. | Representa o preço atualmente praticado no cadastro do produto. |
-
-### PEDIDO
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| id_pedido | Identificador único do pedido. | Chave primária da entidade. |
-| data_hora_pedido | Data e horário do registro do pedido. | Utilizado para acompanhamento e consultas por período. |
-| canal_pedido | Canal de origem do pedido. | Aceita WhatsApp, Balcão ou Plataforma. |
-| status_pedido | Situação atual do pedido. | Deve permitir acompanhar o andamento do pedido. |
-| total_pedido | Valor total do pedido. | Atributo derivado da soma de quantidade × preço unitário dos produtos associados ao pedido. |
-
-### Relacionamento CONTÉM — PEDIDO x PRODUTO
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| quantidade | Quantidade do produto solicitada no pedido. | Deve ser maior que zero. |
-| preco_unitario | Preço do produto praticado no momento do pedido. | Permite preservar o valor da venda mesmo que o preço atual do produto seja alterado posteriormente. |
-
-> **Observação:** `CONTÉM` é um relacionamento entre as entidades PEDIDO e PRODUTO, e não uma entidade independente.
-
-### PAGAMENTO
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| id_pagamento | Identificador único do pagamento. | Chave primária da entidade. |
-| data_pagamento | Data do registro do pagamento. | Pode ser registrada quando o pagamento for confirmado. |
-| forma_pagamento | Forma utilizada para pagamento. | Obrigatória para pedidos de WhatsApp ou balcão, aceitando dinheiro, cartão ou Pix; não é obrigatória para pedidos de plataforma. |
-| valor_pago | Valor registrado no pagamento. | Deve estar relacionado ao valor do pedido. |
-
-### PLATAFORMA
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| id_plataforma | Identificador único da plataforma. | Chave primária da entidade. |
-| nome_plataforma | Nome da plataforma de venda. | Aceita iFood ou Keeta. |
-
----
-
-## 6. Modelagem Conceitual
+## 5. Modelagem Conceitual
 
 ### Entidades reconhecidas
 
@@ -216,7 +153,7 @@ Os processos de negócio identificados foram:
 
 ---
 
-## 7. Diagrama Entidade-Relacionamento (DER)
+## 6. Diagrama Entidade-Relacionamento (DER)
 
 O diagrama conceitual deve utilizar a notação de Chen e representar as entidades, atributos, relacionamentos e cardinalidades descritos neste documento.
 
@@ -234,7 +171,7 @@ A imagem abaixo deve ser atualizada para refletir essas alterações, especialme
 
 ---
 
-## 8. Justificativa Técnica
+## 7. Justificativa Técnica
 
 O modelo foi elaborado para centralizar informações atualmente distribuídas entre WhatsApp, planilhas do Excel, iFood e Keeta, mantendo apenas elementos compatíveis com o funcionamento confirmado durante a pesquisa de campo.
 
@@ -254,7 +191,7 @@ O atributo `total_pedido` é derivado dos produtos associados ao pedido, conside
 
 ---
 
-## 9. Uso de Inteligência Artificial
+## 8. Uso de Inteligência Artificial
 
 | Item | Registro |
 |---|---|
