@@ -160,7 +160,7 @@ flowchart TD
     B -->|iFood ou Keeta| E[Pedido para entrega no mesmo dia]
     D --> F[Receber pagamento antecipado]
     F --> G{Cancelamento solicitado?}
-    G -->|Sim, inclusive a menos de 7 dias| H[Devolução integral (100%), sem multa]
+    G -->|Sim, inclusive a menos de 7 dias| H["Devolução integral (100%), sem multa"]
     G -->|Não| I[Produzir encomenda]
     C --> J[Concluir atendimento presencial]
     E --> K[Preparar e encaminhar entrega no dia]
