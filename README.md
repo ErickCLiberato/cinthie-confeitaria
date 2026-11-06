@@ -168,7 +168,7 @@ flowchart TD
     L --> M
 ```
 
-> **Observação:** o fluxo resume as regras operacionais relatadas. A ausência de cobrança de cancelamento nos canais diretos e os detalhes do atendimento nas mesas ainda exigem confirmação para implementação.
+> **Observação:** a ausência de multa nos canais diretos e o reembolso integral das encomendas WhatsApp foram informados pelo grupo. Os procedimentos de estorno, entrega e atendimento nas mesas ainda precisam de detalhamento com a responsável.
 
 ---
 
@@ -186,7 +186,7 @@ flowchart TD
 | RF08 | O sistema deve permitir registrar e consultar o status do pedido. |
 | RF09 | O sistema deve permitir registrar pagamentos relacionados aos pedidos. |
 | RF10 | O sistema deve permitir registrar a forma de pagamento dos pedidos realizados pelo WhatsApp ou balcão: dinheiro, cartão ou Pix. |
-| RF11 | O sistema deve permitir registrar pagamentos de pedidos realizados por plataforma sem exigir a forma de pagamento utilizada pelo cliente. |
+| RF11 | O sistema deve registrar o pedido e a plataforma de origem, mantendo os pagamentos e estornos de aplicativos fora do controle financeiro interno. |
 | RF12 | O sistema deve permitir identificar o canal de origem de cada pedido: WhatsApp, balcão ou plataforma. |
 | RF13 | O sistema deve permitir vincular pedidos realizados por plataforma ao iFood ou à Keeta. |
 | RF14 | O sistema deve permitir consultar informações de vendas por período, produto, canal e plataforma. |
@@ -203,6 +203,19 @@ flowchart TD
 
 
 ---
+
+### 3.1 Requisitos não funcionais
+
+Os requisitos abaixo são propostas para o sistema a desenvolver. Não representam funcionalidades já implementadas pelo script SQL.
+
+| Código | Requisito | Como conferir |
+|---|---|---|
+| RNF01 | Cada usuário deve ter uma conta individual e permissões conforme sua função. | Testar se um entregador não consegue alterar preços ou pagamentos. |
+| RNF02 | Os dados pessoais devem ser consultados somente por quem precisa deles para atender o pedido. | Conferir os acessos conforme a matriz do dicionário. |
+| RNF03 | O sistema deve permitir backup diário e recuperação dos dados. | Restaurar um backup em um banco separado e conferir os registros. |
+| RNF04 | As telas devem usar termos simples e explicar erros de preenchimento. | Simular um cadastro com quantidade inválida e conferir a mensagem. |
+| RNF05 | Alterações financeiras e acessos a dados pessoais devem ter registro de usuário, data, operação e resultado. | Conferir o registro após uma operação de teste. |
+| RNF06 | A implementação SQL deve funcionar no MySQL 8.0.16 ou superior, com caracteres acentuados e valores monetários em DECIMAL. | Executar o script completo e conferir os exemplos. |
 
 ## 4. Regras de Negócio — revisão da Entrega 2
 
@@ -227,7 +240,7 @@ As regras abaixo consolidam o levantamento anterior com as informações recente
 | RN15 | FUNCIONÁRIO e PEDIDO possuem relacionamento N:N, com `papel_participacao`. |
 | RN16 | Repasses dos aplicativos são conferidos administrativamente; não há módulo próprio de REPASSE. |
 | RN17 | Encomenda via WhatsApp possui data prevista de entrega ou retirada. |
-| RN18 | Não foi definida antecedência mínima obrigatória para contratar encomenda; o prazo de sete dias **não gera multa de cancelamento**. |
+| RN18 | A antecedência mínima para contratar encomenda ainda precisa ser confirmada; isso não significa que ela inexista. O prazo de sete dias **não gera multa de cancelamento**. |
 | RN19 | Encomenda WhatsApp tem pagamento antecipado. |
 | RN20 | No cancelamento de encomenda via WhatsApp paga, o cliente recebe **100% do valor pago**, inclusive com menos de sete dias de antecedência. |
 | RN21 | O pagamento direto já recebido pode gerar ESTORNO; o valor devolvido é registrado e relacionado ao pagamento original. |
@@ -240,6 +253,22 @@ As regras abaixo consolidam o levantamento anterior com as informações recente
 | RN28 | O modelo não armazena taxas de cancelamento de aplicativos como se fossem cobradas pela confeitaria. |
 
 **Pendências de validação com a responsável:** volume mensal de compras e pedidos, identificação de fornecedores, quem realiza compras, eventual devolução de compras no balcão, e procedimentos/timing de estornos em Pix, dinheiro e cartão. Não foram inventadas taxas, fornecedores nem quantidades.
+
+### 4.1 Classificação e informações pendentes
+
+- **Regras operacionais e de integridade:** canais, produtos por pedido, preço histórico, pagamentos, cancelamentos, compras e seus relacionamentos.
+- **Fatos observados:** plataformas atuais (RN03), dias de produção relatados (RN13) e equipe atual (RN14). Não são limites permanentes de cadastro.
+- **Restrições externas:** privacidade/LGPD (RN22), cuidados sanitários (RN23) e obrigações fiscais (RN24). O enquadramento e os procedimentos concretos precisam ser confirmados.
+
+| Pergunta para a responsável | Motivo |
+|---|---|
+| Qual é a antecedência mínima para encomendar? | Definir a regra de agendamento sem confundir com o prazo de cancelamento. |
+| Quais bairros são atendidos e como se calcula a taxa? | Completar o processo de entrega. |
+| Quem compra, de quem compra e como confere validade e recebimento? | Completar o processo de compras e cuidados sanitários. |
+| Como são feitos o fechamento do caixa e os comprovantes fiscais? | Detalhar o controle administrativo. |
+| Quem pode consultar dados pessoais e por quanto tempo são guardados? | Validar permissões e retenção, considerando obrigações aplicáveis. |
+
+As respostas não foram inventadas. As propostas de acesso e registro estão no [dicionário de dados](dicionario-dados.html#acesso).
 
 ---
 
@@ -294,7 +323,9 @@ As regras abaixo consolidam o levantamento anterior com as informações recente
 
 A notação relacional exige tabelas associativas para cada N:N. Assim, a decisão de **não criar ITEM_PEDIDO como entidade conceitual** é preservada, enquanto `ITEM_PEDIDO` aparece necessariamente no **modelo lógico**. O mesmo acontece com `PEDIDO_FUNCIONARIO` e `COMPRA_INSUMO`.
 
-O arquivo fornecido para a implementação está disponível no [script SQL do projeto](cinthie_confeitaria-2.sql). A compatibilização integral do script com as regras de conversão abaixo ainda precisa ser validada.
+O [script SQL do projeto](cinthie_confeitaria-2.sql) implementa 12 tabelas no banco `cinthie_confeitaria_v3`. O nome separado preserva o banco da versão anterior. Para estudar os exemplos, abra o arquivo no MySQL Workbench e execute-o inteiro usando MySQL 8.0.16 ou superior.
+
+O script usa chaves, `NOT NULL`, `UNIQUE` e `CHECK` para regras simples. Regras que envolvem várias tabelas são verificadas pelas consultas finais: elas apontam inconsistências, mas não bloqueiam gravações. Portanto, o RF21 é um requisito do sistema completo; o script atual oferece conferência, não bloqueio automático. Também dependem de conferência o pagamento integral, o reembolso e a existência de itens em pedidos e compras.
 
 ### Principais regras de conversão
 
@@ -306,7 +337,9 @@ O arquivo fornecido para a implementação está disponível no [script SQL do p
 
 ### Estado da Entrega 2
 
-Esta revisão cobre **DER, dicionário de dados, conversão inicial e modelo lógico**. Ainda são tarefas distintas a serem concluídas e validadas para a entrega integral: implementação SQL testada, massa de dados fictícios, consultas gerenciais/auditoria, normalização documentada e pitch. Não apresentar esta revisão isolada como a Entrega 2 completa.
+Esta revisão inclui DER, dicionário, conversão lógica e SQL com exemplos fictícios e consultas. O SQL foi executado no MySQL 8.0.46: criou 12 tabelas, permitiu dois pagamentos de R$ 20 e R$ 25, registrou seus estornos integrais e calculou uma compra de R$ 15. A repetição não duplicou os exemplos. Foram testadas seis rejeições por restrições e a detecção de pagamento indevido de aplicativo por consulta.
+
+Ainda faltam a confirmação das informações da entrevista, a implementação dos controles de acesso e logs propostos, a ampliação dos cenários e relatórios, a normalização documentada e o pitch. A execução do SQL não comprova esses itens nem encerra a Entrega 2.
 
 ---
 
@@ -341,6 +374,23 @@ Esta revisão cobre **DER, dicionário de dados, conversão inicial e modelo ló
 > **Transparência:** os prompts originais anteriores à revisão não constam dos arquivos fornecidos. Para documentar o histórico completo, anexar suas transcrições originais quando disponíveis; não substituir por exemplos fictícios.
 
 ---
+
+### 8.3 Registro da atualização do SQL e da revisão documental
+
+Transcrições de solicitações presentes na conversa com o Codex:
+
+> Atualize o SQL porém lembre que sou um anulo que não sabe mexer muito em SQL nem em banco de dados. Mantenha meio que o "padrão" que já estava sendo usado na versão já presente do SQL no github, como se aínda fosse eu fazendo ele
+
+> Veja se tudo está correto com o issues que o professor deixou
+
+> Arruma as coisas
+
+- **Ferramenta:** ChatGPT/Codex. Revisão documental em 06/11/2026.
+- **Resposta adotada, em resumo:** inclusão de compras, insumos e estornos, atualização dos campos e exemplos, comparação com a issue #1 e complementação dos requisitos e do dicionário.
+- **Exemplo concreto:** o pagamento deixou de ter `UNIQUE` em `id_pedido`, permitindo dois recebimentos para o mesmo pedido. O estorno manteve `UNIQUE` em `id_pagamento`, limitando a um estorno por recebimento.
+- **Escolha e limite:** foram mantidos comandos SQL simples. Consultas detectam algumas violações entre tabelas, sem impedir a gravação; isso foi explicitado em vez de apresentar o script como um sistema completo.
+- **Correção documental:** o RF11 foi alinhado ao RF21 para não registrar pagamentos de aplicativos internamente.
+- **Validação:** execução e testes do SQL pelo Codex; o grupo ainda deve revisar as regras com a responsável e conferir os resultados antes da entrega. Os prompts antigos que não foram preservados continuam indisponíveis.
 
 ## 9. Dicionário de Dados e Arquivos
 
