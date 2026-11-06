@@ -1,4 +1,5 @@
-# Entrega 1 — Modelo Conceitual (DER)
+# Cinthiê Confeitaria — Modelagem de Banco de Dados
+### Revisão conceitual e conversão inicial para o modelo lógico (Entrega 2)
 ## Sistema de gestão de informações da Cinthiê Confeitaria
 
 ## Metadados
@@ -6,11 +7,11 @@
 - **Integrantes e RGM:**
   - Douglas Lourenço de Lima — RGM: 47892919
   - Erick Costa Liberato — RGM: 48201693
-  - Giovanna Pereira Bispo da Silva — RGM: 48065285
   - João Lucas Moreira dos Reis — RGM: 48162086
   - Nicolas Nogueira Borges — RGM: 48329266
 - **Disciplina:** Modelagem de Banco de Dados
 - **Organização analisada:** Cinthiê Confeitaria
+- **Versão do documento:** 3.0 — revisão do DER e conversão lógica (05/11/2026)
 
 ---
 
@@ -28,15 +29,15 @@ Segundo a entrevista realizada com a responsável pelo estabelecimento, a confei
 - um funcionário exerce as funções de **ajudante de cozinha e responsável pelo atendimento no balcão**;
 - um funcionário exerce a função de **motoboy/entregador**.
 
-Os pedidos podem ser realizados diretamente pelo **WhatsApp**, no **balcão** ou por meio das plataformas **iFood** e **Keeta**. WhatsApp e balcão são considerados canais diretos de atendimento, enquanto iFood e Keeta são tratados como plataformas de venda.
+A confeitaria atende clientes **no próprio salão, com mesas para consumo no local**, além de realizar vendas no **balcão**, receber **encomendas pelo WhatsApp** e receber **pedidos de entrega no mesmo dia pelos aplicativos iFood e Keeta**. WhatsApp e balcão são canais diretos; iFood e Keeta são plataformas de venda. **Os aplicativos não são utilizados para encomendas agendadas.**
 
-A confeitaria não trabalha com estoque. Os produtos são fabricados conforme a demanda e as encomendas recebidas, com produção realizada aos **domingos e às quartas-feiras**.
+Há **produtos prontos para venda no balcão e consumo nas mesas**, além de encomendas contratadas pelo WhatsApp e pedidos de entrega no dia pelos aplicativos. A produção relatada inclui atividades aos **domingos e às quartas-feiras**, sem pressupor que toda a produção se limite a esses dias. A **compra de insumos é realizada uma vez por mês**. O modelo registra compras mensais e itens adquiridos, mas não implementa controle de estoque de ingredientes ou produtos prontos; essa é uma delimitação do sistema proposto, e não a afirmação de inexistência de mercadorias disponíveis no estabelecimento.
 
 ### Problemas e necessidades identificados
 
 Atualmente, as informações da organização estão distribuídas entre WhatsApp, planilhas do Microsoft Excel e plataformas de venda. Parte do controle administrativo é realizada ao final do expediente, o que torna a organização e a consolidação das informações mais demoradas.
 
-O sistema proposto busca centralizar os dados de clientes, pedidos, produtos, pagamentos, plataformas e funcionários envolvidos nas operações, reduzindo o tempo gasto na organização das informações e facilitando consultas e controles.
+O sistema proposto busca centralizar os dados de clientes, pedidos, produtos, pagamentos diretos, eventuais estornos, plataformas, funcionários, insumos e compras, reduzindo o tempo gasto na consolidação de informações.
 
 ### Justificativa da escolha
 
@@ -50,20 +51,127 @@ Como evidências da pesquisa de campo, foram realizadas fotografias do estabelec
 
 ![Evidência da organização](assets/imagem.jpeg)
 
+**Endereço do estabelecimento:** R. Césario Galero, 262, Tatuapé — São Paulo — SP, CEP 03071-000.
+
+**Contato comercial:** não informado; incluir apenas após confirmação com a responsável.
+
+**Fonte primária:** entrevista presencial e registros fotográficos descritos pelo grupo. Os pontos ainda não confirmados estão explicitamente sinalizados abaixo.
+
 ---
 
 ## 2. Processos de Negócio
 
-Os processos de negócio identificados foram:
+Os processos a seguir combinam **rotinas relatadas no levantamento** com **etapas que precisam ser confirmadas na entrevista complementar**. O fluxo descreve operações reais ou relevantes à caracterização da confeitaria; sua inclusão nesta seção **não significa** que todas serão implementadas no banco de dados desta Entrega 1.
 
-1. **Atendimento e registro de clientes:** atendimento realizado principalmente pelo WhatsApp e no balcão, com registro das informações necessárias para identificação e acompanhamento dos pedidos.
-2. **Recebimento e registro de pedidos:** registro de pedidos realizados pelo WhatsApp, balcão, iFood ou Keeta.
-3. **Composição do pedido:** associação de um ou mais produtos ao pedido, registrando a quantidade solicitada e o preço praticado.
-4. **Fabricação dos produtos:** produção realizada conforme a demanda e as encomendas recebidas. A fabricação ocorre aos domingos e às quartas-feiras. Como os produtos são produzidos de acordo com os pedidos, não há controle de estoque no escopo deste sistema.
-5. **Registro de pagamentos:** nos pedidos realizados pelo WhatsApp ou balcão, a forma de pagamento pode ser dinheiro, cartão ou Pix. Nos pedidos realizados por plataformas, não é necessário registrar a forma específica utilizada pelo cliente.
-6. **Acompanhamento de vendas por plataforma:** identificação dos pedidos realizados pelo iFood ou Keeta e acompanhamento dos repasses dessas plataformas.
-7. **Participação dos funcionários:** os funcionários podem atuar no atendimento, produção ou entrega dos pedidos, de acordo com suas funções.
-8. **Controle administrativo:** consolidação das informações administrativas, atualmente apoiada por planilhas do Excel e parcialmente executada ao final do expediente.
+### 2.1 Atendimento e identificação de clientes
+
+- **Entrada:** solicitação presencial, mensagem de WhatsApp ou pedido recebido pela plataforma.
+- **Atividades:** entender a solicitação; identificar o cliente quando necessário e quando os dados estiverem disponíveis; esclarecer produto, quantidade e condições do atendimento.
+- **Saída:** informações que permitem registrar o pedido. No balcão, pode haver pedido sem cliente cadastrado, como admite a cardinalidade do DER.
+
+### 2.2 Recebimento de pedidos multicanal e consumo no local
+
+- **Entrada:** compra para consumo no local, solicitação no balcão, encomenda pelo WhatsApp ou pedido de entrega no dia via iFood ou Keeta.
+- **Atividades:** identificar a origem; diferenciar venda presencial, encomenda e pedido imediato do aplicativo; se for plataforma, registrar qual delas; selecionar produtos; informar quantidades e preços praticados; registrar o status inicial.
+- **Limite do DER:** a distinção entre balcão e consumo nas mesas é operacional; o modelo atual não possui atributo específico para número de mesa ou atendimento no salão.
+- **Saída:** pedido registrado e associado a pelo menos um produto.
+
+### 2.3 Cardápio e preços
+
+- **Entrada:** catálogo de produtos e preços definidos pela confeitaria.
+- **Atividades propostas para o sistema:** cadastrar e consultar produtos e seus preços atuais; ao vender, preservar o preço unitário praticado no vínculo entre produto e pedido.
+- **Saída:** pedido com valores históricos coerentes, mesmo se o preço cadastrado do produto mudar.
+- **A confirmar:** quem altera o cardápio, com qual frequência e se os preços diferem entre canais.
+
+### 2.4 Encomendas pelo WhatsApp e agendamento
+
+- **Entrada:** solicitação de encomenda pelo WhatsApp; os aplicativos não recebem encomendas agendadas.
+- **Atividades:** confirmar itens e quantidades; negociar a data e a modalidade de recebimento; verificar disponibilidade de produção; informar o valor total e as condições de pagamento. **As encomendas feitas pelo WhatsApp exigem pagamento antecipado**, conforme informação complementar da responsável.
+- **Saída:** encomenda aceita e acompanhada pelo pedido.
+- **Confirmado:** pagamento antecipado nas encomendas por WhatsApp; cancelamentos de encomendas pelo WhatsApp, inclusive com menos de sete dias de antecedência da entrega, não geram multa nem retenção, com **devolução integral (100%) do valor pago**.
+- **A confirmar:** a antecedência mínima para **fazer** a encomenda e os procedimentos operacionais de estorno. O prazo de sete dias não altera o percentual devolvido. O DER revisado registra a data prevista de atendimento, mas o prazo de sete dias não altera a regra de reembolso integral.
+
+### 2.5 Produção sob demanda
+
+- **Entrada:** pedidos e encomendas aceitos.
+- **Atividades:** planejar o preparo em função da demanda, produzir os itens e atualizar o andamento do pedido. O levantamento relata produção aos domingos e quartas-feiras.
+- **Saída:** pedido preparado para entrega ou retirada.
+- **Limite de escopo:** não há módulo de estoque ou ficha técnica de ingredientes na modelagem atual.
+
+### 2.6 Entrega dos pedidos no dia e de encomendas
+
+- **Entrada:** pedido pronto para envio.
+- **Atividades:** organizar o encaminhamento e a participação do funcionário que executa a entrega; acompanhar o estado do pedido.
+- **Saída:** pedido entregue e concluído.
+- **A confirmar:** área atendida, cálculo de taxa, registro de endereço, comprovante e tratamento de entregas intermediadas por plataformas. O DER não possui entidade ENTREGA.
+
+### 2.7 Retirada no balcão e consumo no estabelecimento
+
+- **Entrada:** produto selecionado para consumo no local ou pedido pronto para retirada.
+- **Atividades:** disponibilizar o produto, atender clientes nas mesas quando aplicável, conferir dados do pedido quando necessários e concluir o atendimento.
+- **Saída:** pedido retirado e situação atualizada.
+- **A confirmar:** procedimento utilizado para comunicar que a encomenda está pronta.
+
+### 2.8 Pagamento dos pedidos diretos
+
+- **Canais:** WhatsApp e balcão, com dinheiro, Pix ou cartão (incluindo maquininha).
+- **Regra confirmada:** não há taxa ou multa de cancelamento para pagamentos nos canais diretos. Maquininha é meio de processamento de cartão, não um aplicativo de venda.
+- **Encomendas por WhatsApp:** exigem pagamento antecipado; em caso de cancelamento, a devolução é integral (100% do valor pago), inclusive com menos de sete dias de antecedência.
+- **Modelagem:** PEDIDO pode possuir zero ou vários PAGAMENTOS (ex.: recebimentos em etapas, se ocorrerem); um PAGAMENTO pertence a um único PEDIDO. ESTORNO representa uma devolução vinculada a um PAGAMENTO direto, quando realizada; no máximo um estorno por pagamento nesta versão.
+- **Limite:** não se presume parcelamento/sinal e saldo como prática confirmada; a cardinalidade permite expansão futura, sem obrigar seu uso.
+
+### 2.9 Pedidos de aplicativo e repasses
+
+- iFood e Keeta recebem pedidos para entrega no mesmo dia, sem encomendas agendadas.
+- O PEDIDO registra o canal e qual PLATAFORMA o originou; **o pagamento, eventual cancelamento, estorno e possíveis taxas são processados pelo próprio aplicativo**, conforme suas políticas.
+- O sistema da confeitaria **não cria PAGAMENTO nem ESTORNO internos para esses pedidos de aplicativo**. A conferência de repasses é descrita como processo administrativo, ainda sem entidade REPASSE.
+
+### 2.10 Cancelamento e reembolso por canal
+
+- **WhatsApp, balcão e pagamentos na maquininha:** não existe taxa ou multa de cancelamento cobrada pela confeitaria.
+- **Encomendas por WhatsApp:** quando há cancelamento de encomenda já paga, devolve-se **100% do valor pago**, independentemente de faltarem mais ou menos de sete dias para a data prevista.
+- **Balcão:** o cancelamento não possui taxa; se ainda não houve recebimento, não há estorno a registrar. Quando um valor tiver sido recebido e devolvido, é possível registrar ESTORNO com o valor efetivamente devolvido. A forma concreta de devolução no balcão deve ser validada na entrevista.
+- **iFood e Keeta:** pagamento, cancelamento e eventual devolução são tratados exclusivamente no aplicativo, sem lançamento de estorno interno pela confeitaria.
+- **Dados:** PEDIDO guarda status e data/hora de cancelamento; o histórico financeiro direto é mantido em PAGAMENTO e ESTORNO. Não há atributo `taxa_cancelamento` pois a taxa direta é zero e as taxas dos apps são externas.
+
+### 2.11 Compra de ingredientes e relacionamento com fornecedores
+
+- **Entrada:** necessidade de ingredientes e embalagens para atender à produção.
+- **Atividades:** aquisição de insumos **uma vez por mês**, para atender à produção de encomendas e de produtos comercializados no balcão. As etapas específicas de seleção de fornecedores, recebimento e conferência de validades ainda precisam ser confirmadas.
+- **Saída:** insumos disponíveis para a produção.
+- **Confirmado:** periodicidade mensal das compras e existência de produtos para venda no balcão. **A confirmar:** nomes dos fornecedores, responsáveis pelas compras, armazenamento e controle de validade. **INSUMO e COMPRA estão no DER revisado; FORNECEDOR e ESTOQUE permanecem fora do escopo**, embora seu processo operacional esteja documentado.
+
+**Modelagem confirmada como proposta:** COMPRA contém uma data e um ou mais INSUMOS adquiridos, com quantidade e custo unitário. O cadastro descreve compras, não consumo, saldo de estoque nem controle de validade. O valor total da compra é derivado da soma dos subtotais.
+
+### 2.12 Controle administrativo e caixa
+
+- **Entrada:** pedidos, pagamentos e dados de vendas por canais e plataformas.
+- **Atividades:** conferir os registros, consultar vendas por período e consolidar informações; atualmente, parte desse trabalho utiliza Excel e acontece ao final do expediente.
+- **Saída:** visão administrativa das operações e dos valores recebidos ou a receber.
+- **A confirmar:** abertura/fechamento de caixa, conciliação, despesas e periodicidade dos relatórios.
+
+### 2.13 Fluxo geral dos dados
+
+```mermaid
+flowchart TD
+    A[Solicitação de compra] --> B{Canal e modalidade}
+    B -->|Salão ou balcão| C[Venda de produto disponível]
+    B -->|WhatsApp: encomenda| D[Definir produtos e data de entrega]
+    B -->|iFood ou Keeta| E[Pedido para entrega no mesmo dia]
+    D --> F[Receber pagamento antecipado]
+    F --> G{Cancelamento solicitado?}
+    G -->|Sim, inclusive a menos de 7 dias| H["Devolução integral (100%), sem multa"]
+    G -->|Não| I[Produzir encomenda]
+    C --> J[Concluir atendimento presencial]
+    E --> K[Preparar e encaminhar entrega no dia]
+    I --> L[Entregar ou disponibilizar retirada]
+    H --> M[Atualizar status e controle financeiro]
+    J --> M
+    K --> M
+    L --> M
+```
+
+> **Observação:** o fluxo resume as regras operacionais relatadas. A ausência de cobrança de cancelamento nos canais diretos e os detalhes do atendimento nas mesas ainda exigem confirmação para implementação.
 
 ---
 
@@ -88,106 +196,120 @@ Os processos de negócio identificados foram:
 | RF15 | O sistema deve permitir cadastrar funcionários. |
 | RF16 | O sistema deve permitir consultar funcionários cadastrados e suas funções. |
 | RF17 | O sistema deve permitir associar ao pedido os funcionários que participaram do atendimento, produção ou entrega, quando essa informação for registrada. |
+| RF18 | O sistema deve registrar a data prevista de atendimento de encomendas e o momento de cancelamento, quando aplicável. |
+| RF19 | O sistema deve registrar pagamentos diretos vinculados aos pedidos por WhatsApp ou balcão, sem taxa de cancelamento. |
+| RF20 | O sistema deve permitir registrar estornos de pagamentos diretos, vinculados aos pagamentos originais e aos valores efetivamente devolvidos. |
+| RF21 | O sistema deve impedir lançamentos internos de PAGAMENTO e ESTORNO para pedidos processados integralmente por iFood ou Keeta. |
+| RF22 | O sistema deve permitir cadastrar INSUMO com nome e unidade de medida. |
+| RF23 | O sistema deve permitir registrar COMPRA com data e insumos adquiridos, quantidades e custos unitários. |
+| RF24 | O sistema deve permitir apurar subtotais e totais derivados de PEDIDO e COMPRA a partir das relações correspondentes. |
+
 
 ---
 
-## 4. Regras de Negócio
+## 4. Regras de Negócio — revisão da Entrega 2
 
-| Código | Regra de negócio |
+As regras abaixo consolidam o levantamento anterior com as informações recentes do grupo. Os códigos originais são mantidos sempre que possível, e a revisão é datada para rastreabilidade.
+
+| Código | Regra atualizada |
 |---|---|
-| RN01 | Todo pedido deve registrar seu canal de origem: WhatsApp, balcão ou plataforma. |
-| RN02 | WhatsApp e balcão são canais diretos de pedido e não são plataformas de venda. |
-| RN03 | As plataformas de venda utilizadas pela organização são iFood e Keeta. |
-| RN04 | Todo pedido originado por plataforma deve identificar a plataforma correspondente. Pedidos realizados pelo WhatsApp ou balcão não possuem plataforma vinculada. |
-| RN05 | Todo pedido deve possuir um ou mais produtos associados. |
-| RN06 | Para cada produto associado a um pedido, devem ser registradas a quantidade solicitada e o preço unitário praticado no momento da venda. |
-| RN07 | O valor total do pedido é calculado a partir da soma de quantidade × preço unitário de todos os produtos associados ao pedido. |
-| RN08 | Todo pedido deve possuir um status que represente sua situação atual. |
-| RN09 | Um pedido ainda não finalizado pode não possuir pagamento registrado. Quando finalizado, deve possuir seu respectivo pagamento. |
-| RN10 | Nos pedidos realizados pelo WhatsApp ou balcão, a forma de pagamento deve ser registrada como dinheiro, cartão ou Pix. |
-| RN11 | Nos pedidos realizados por iFood ou Keeta, não é necessário registrar a forma específica de pagamento utilizada pelo cliente. |
-| RN12 | A confeitaria não trabalha com estoque, pois os produtos são fabricados de acordo com a demanda e as encomendas recebidas. |
-| RN13 | A fabricação dos produtos ocorre aos domingos e às quartas-feiras, de acordo com as encomendas e a demanda. |
-| RN14 | A organização possui três funcionários: uma gerente/confeiteira, um ajudante de cozinha que também realiza atendimento no balcão e um motoboy/entregador. |
-| RN15 | Um funcionário pode participar de vários pedidos, e um pedido pode envolver mais de um funcionário em atividades de atendimento, produção ou entrega. |
-| RN16 | Os repasses das plataformas são acompanhados semanalmente, conforme o procedimento administrativo adotado pelo estabelecimento. |
+| RN01 | Todo PEDIDO possui canal de origem: WhatsApp, balcão ou plataforma. |
+| RN02 | WhatsApp e balcão são canais diretos; não pertencem à entidade PLATAFORMA. |
+| RN03 | As plataformas atualmente utilizadas são iFood e Keeta (informação da operação, não limite permanente). |
+| RN04 | PEDIDO de plataforma identifica uma PLATAFORMA; PEDIDO direto não possui plataforma vinculada. |
+| RN05 | Cada PEDIDO deve conter pelo menos um PRODUTO. |
+| RN06 | A relação CONTÉM registra `quantidade` e `preco_unitario` praticado, preservando o preço histórico. |
+| RN07 | O `total_pedido` é derivado da soma de `quantidade × preco_unitario`. |
+| RN08 | O PEDIDO mantém `status_pedido`; se cancelado, pode registrar `data_hora_cancelamento`. |
+| RN09 | PEDIDO direto pode possuir zero ou vários PAGAMENTOS; cada PAGAMENTO corresponde a um único PEDIDO direto. A confirmação de encomenda por WhatsApp requer pagamento antecipado. |
+| RN10 | Nos pagamentos diretos, registrar forma de pagamento como dinheiro, Pix ou cartão (inclusive maquininha). **Não existe taxa de cancelamento** nesses canais. |
+| RN11 | Em iFood/Keeta, pagamento, cancelamento e eventual estorno permanecem na própria plataforma. Não registrar transações PAGAMENTO ou ESTORNO internas para esses pedidos. |
+| RN12 | O sistema registra COMPRA e INSUMO da aquisição mensal, mas não calcula saldo de estoque nem consumo de ingredientes. |
+| RN13 | Foi relatada produção aos domingos e quartas-feiras, sem presumir exclusividade desses dias. |
+| RN14 | Há três funcionários na operação observada; isso não impõe limite de cadastro no banco. |
+| RN15 | FUNCIONÁRIO e PEDIDO possuem relacionamento N:N, com `papel_participacao`. |
+| RN16 | Repasses dos aplicativos são conferidos administrativamente; não há módulo próprio de REPASSE. |
+| RN17 | Encomenda via WhatsApp possui data prevista de entrega ou retirada. |
+| RN18 | Não foi definida antecedência mínima obrigatória para contratar encomenda; o prazo de sete dias **não gera multa de cancelamento**. |
+| RN19 | Encomenda WhatsApp tem pagamento antecipado. |
+| RN20 | No cancelamento de encomenda via WhatsApp paga, o cliente recebe **100% do valor pago**, inclusive com menos de sete dias de antecedência. |
+| RN21 | O pagamento direto já recebido pode gerar ESTORNO; o valor devolvido é registrado e relacionado ao pagamento original. |
+| RN22 | Dados pessoais requerem acesso controlado e proteção conforme LGPD. |
+| RN23 | Compras e manipulação de alimentos seguem regras sanitárias aplicáveis, cuja execução local deve ser confirmada. |
+| RN24 | Obrigações fiscais e comprovantes da operação dependem do enquadramento a confirmar na organização. |
+| RN25 | Cada COMPRA possui um ou mais INSUMOS, registrando `quantidade` e `custo_unitario` no relacionamento ADQUIRE. |
+| RN26 | `subtotal_compra` e `total_compra` são derivados dos custos de compra; não são dados de estoque. |
+| RN27 | Para um mesmo PAGAMENTO direto, esta versão admite no máximo um ESTORNO; devoluções parceladas exigiriam ampliação posterior. |
+| RN28 | O modelo não armazena taxas de cancelamento de aplicativos como se fossem cobradas pela confeitaria. |
 
-> **Decisão de escopo:** o acompanhamento de repasses foi identificado na pesquisa de campo, mas nesta Entrega 1 ele é mantido como regra de negócio. Não foi criada uma entidade específica para repasse no modelo conceitual.
+**Pendências de validação com a responsável:** volume mensal de compras e pedidos, identificação de fornecedores, quem realiza compras, eventual devolução de compras no balcão, e procedimentos/timing de estornos em Pix, dinheiro e cartão. Não foram inventadas taxas, fornecedores nem quantidades.
 
 ---
 
-## 5. Modelagem Conceitual
+## 5. Modelagem Conceitual Revisada
 
-### Entidades reconhecidas
+### Entidades e justificativas
 
-| Entidade | Justificativa |
+| Entidade | Informação representada |
 |---|---|
-| CLIENTE | Representa as pessoas atendidas pela confeitaria e permite organizar seus dados de contato. |
-| FUNCIONARIO | Representa os três colaboradores envolvidos na gestão, produção, atendimento e entrega. |
-| PRODUTO | Representa os produtos fabricados sob demanda e comercializados pela confeitaria. |
-| PEDIDO | Representa cada solicitação de compra realizada pelos clientes. |
-| PAGAMENTO | Representa o pagamento relacionado ao pedido. |
-| PLATAFORMA | Identifica os pedidos realizados por iFood ou Keeta. |
+| CLIENTE | Identificação e contato quando disponíveis. |
+| FUNCIONÁRIO | Equipe de atendimento, produção ou entrega. |
+| PRODUTO | Catálogo de produtos comercializados. |
+| PEDIDO | Origem, tipo, modalidade, datas e situação da venda/encomenda. |
+| PLATAFORMA | Identifica iFood ou Keeta, quando pedido é originado por aplicativo. |
+| PAGAMENTO | Recebimentos de pedidos **diretos**, vinculados ao pedido. |
+| ESTORNO | Devolução de valores recebidos em pagamento **direto**. |
+| COMPRA | Aquisição de insumos registrada por data. |
+| INSUMO | Item comprado para produção, sem monitoramento de estoque. |
 
 ### Relacionamentos e cardinalidades
 
-| Relacionamento | Cardinalidade | Justificativa |
+| Relação | Cardinalidades (máximo de ocorrências do outro lado) | Observação |
 |---|---|---|
-| Cliente realiza Pedido | Cliente (0,N) — Pedido (0,1) | Um cliente pode realizar vários pedidos; um pedido pode não possuir cliente cadastrado quando não houver identificação disponível. |
-| Pedido contém Produto | Pedido (1,N) — Produto (0,N) | Todo pedido deve conter um ou mais produtos, e um produto pode aparecer em vários pedidos. O relacionamento registra quantidade e preço unitário. |
-| Funcionário participa de Pedido | Funcionário (0,N) — Pedido (0,N) | Um funcionário pode participar de vários pedidos e um pedido pode envolver mais de um funcionário em atividades de atendimento, produção ou entrega. |
-| Pedido possui Pagamento | Pedido (0,1) — Pagamento (1,1) | Um pedido pode ainda não possuir pagamento enquanto não estiver finalizado; todo pagamento registrado pertence a um único pedido. |
-| Pedido origina-se de Plataforma | Pedido (0,1) — Plataforma (0,N) | Pedidos de WhatsApp ou balcão não possuem plataforma vinculada. Pedidos de plataforma devem identificar iFood ou Keeta. |
+| CLIENTE **FAZ** PEDIDO | CLIENTE (0,N) — PEDIDO (0,1) | Pedido pode não ter cliente cadastrado. |
+| FUNCIONÁRIO **PARTICIPA DE** PEDIDO | FUNCIONÁRIO (0,N) — PEDIDO (0,N) | Atributo `papel_participacao`. |
+| PEDIDO **ORIGINA EM** PLATAFORMA | PEDIDO (0,1) — PLATAFORMA (0,N) | Obrigatório somente para canal plataforma. |
+| PEDIDO **POSSUI** PAGAMENTO | PEDIDO (0,N) — PAGAMENTO (1,1) | Pagamentos internos somente para canais diretos. |
+| PAGAMENTO **GERA** ESTORNO | PAGAMENTO (0,1) — ESTORNO (1,1) | Um estorno, no máximo, por recebimento nesta versão. |
+| PEDIDO **CONTÉM** PRODUTO | PEDIDO (1,N) — PRODUTO (0,N) | `quantidade`, `preco_unitario` e subtotal derivado. |
+| COMPRA **ADQUIRE** INSUMO | COMPRA (1,N) — INSUMO (0,N) | `quantidade`, `custo_unitario` e subtotal derivado. |
 
-### Restrições aplicadas ao modelo
+**Convenções:** entidades em retângulos, relacionamentos em losangos e cardinalidades (mínimo, máximo). Os identificadores estão sublinhados. Os atributos próprios dos relacionamentos aparecem em elipses. `total_pedido` e `total_compra` estão fora dos retângulos e representados por elipses tracejadas, assim como os subtotais derivados. Não há chaves estrangeiras no DER conceitual.
 
-- PEDIDO e PRODUTO são ligados diretamente pelo relacionamento muitos-para-muitos `CONTÉM`, sem a criação de uma entidade intermediária.
-- O relacionamento `CONTÉM` registra `quantidade` e `preco_unitario` para cada produto associado a um pedido.
-- WhatsApp e balcão são canais diretos; iFood e Keeta são plataformas de venda.
-- A forma de pagamento é obrigatória para pedidos diretos realizados pelo WhatsApp ou balcão, mas não precisa ser detalhada para pedidos realizados por plataforma.
-- Não foram incluídas entidades de estoque ou ingredientes, pois a confeitaria não trabalha com estoque no escopo levantado e fabrica os produtos conforme a demanda.
-- A fabricação ocorre aos domingos e às quartas-feiras, conforme as encomendas e a demanda.
-- O motoboy/entregador é um dos três funcionários da confeitaria e, portanto, é representado pela entidade FUNCIONARIO.
-- Gerente e confeiteira são funções exercidas pela mesma funcionária. Ajudante de cozinha e atendimento no balcão são funções exercidas pelo mesmo funcionário.
-- Não foi criada uma entidade específica para entrega, pois a entrega pode ser representada como uma atividade realizada por funcionário associado ao pedido nesta etapa do modelo.
+### Limites assumidos
 
----
-
-## 6. Diagrama Entidade-Relacionamento (DER)
-
-O diagrama conceitual deve utilizar a notação de Chen e representar as entidades, atributos, relacionamentos e cardinalidades descritos neste documento.
-
-A versão atualizada do DER deve apresentar, no mínimo, os seguintes relacionamentos:
-
-- CLIENTE — **REALIZA** — PEDIDO;
-- PEDIDO — **CONTÉM** — PRODUTO, com os atributos `quantidade` e `preco_unitario` no relacionamento;
-- FUNCIONARIO — **PARTICIPA DE** — PEDIDO;
-- PEDIDO — **POSSUI** — PAGAMENTO;
-- PEDIDO — **ORIGINA-SE DE** — PLATAFORMA.
-
-A imagem abaixo deve ser atualizada para refletir essas alterações, especialmente a relação direta entre PEDIDO e PRODUTO, a inclusão do balcão, do status do pedido e a nova interpretação de FUNCIONARIO.
-
-![DER conceitual da Cinthiê Confeitaria](assets/der_conceitual_cinthie_confeitaria_fundo_branco.png)
+- Sem saldo de estoque, ficha técnica de receitas, fornecedor ou controle de entrada e saída de ingrediente.
+- A entidade COMPRA registra a **aquisição**, não o consumo nem a quantidade disponível de INSUMO.
+- Pagamentos e estornos de aplicativo continuam na plataforma; apenas o PEDIDO e sua origem são registrados internamente.
+- O estorno de pagamento direto é operação distinta do cancelamento do PEDIDO; cancelar antes de pagar não gera estorno.
 
 ---
 
-## 7. Justificativa Técnica
+## 6. DER Conceitual — Diagrama Atualizado
 
-O modelo foi elaborado para centralizar informações atualmente distribuídas entre WhatsApp, planilhas do Excel, iFood e Keeta, mantendo apenas elementos compatíveis com o funcionamento confirmado durante a pesquisa de campo.
+![DER conceitual corrigido — Cinthiê Confeitaria](assets/der_conceitual_corrigido.png)
 
-Conforme orientação do professor, **PEDIDO** e **PRODUTO** passaram a ser representados diretamente pelo relacionamento muitos-para-muitos `CONTÉM`, sem entidade intermediária. Os atributos `quantidade` e `preco_unitario` pertencem a esse relacionamento porque seus valores dependem de cada ocorrência de produto em um pedido.
+**Revisões incorporadas:** compras e insumos; totais derivados ligados externamente; cancelamento direto sem taxa; ESTORNO para recebimentos diretos; vínculo PEDIDO–PAGAMENTO ajustado de (0,1) para (0,N); aplicativos mantidos como plataformas externas.
 
-A entidade **FUNCIONARIO** foi mantida porque o sistema deverá armazenar informações dos três colaboradores da confeitaria. Uma funcionária exerce as funções de gerente e confeiteira; outro funcionário atua como ajudante de cozinha e também no atendimento do balcão; e o terceiro funcionário atua como motoboy/entregador. Como mais de um funcionário pode participar de um mesmo pedido, o relacionamento entre FUNCIONARIO e PEDIDO foi definido como muitos-para-muitos.
+---
 
-O **balcão** foi incluído como canal direto de pedido, juntamente com o WhatsApp. Já iFood e Keeta são representados pela entidade PLATAFORMA. Dessa forma, um pedido pode ter como canal WhatsApp, balcão ou plataforma; quando o canal for plataforma, deve existir vínculo com iFood ou Keeta.
+## 7. Conversão para o Modelo Lógico
 
-O atributo `status_pedido` foi incluído em PEDIDO para permitir distinguir pedidos ainda em andamento de pedidos finalizados. Essa informação também torna coerente a cardinalidade entre PEDIDO e PAGAMENTO: um pedido em andamento pode ainda não possuir pagamento, enquanto todo pagamento registrado deve pertencer a um pedido.
+A notação relacional exige tabelas associativas para cada N:N. Assim, a decisão de **não criar ITEM_PEDIDO como entidade conceitual** é preservada, enquanto `ITEM_PEDIDO` aparece necessariamente no **modelo lógico**. O mesmo acontece com `PEDIDO_FUNCIONARIO` e `COMPRA_INSUMO`.
 
-O tratamento dos pagamentos depende do canal do pedido. Para pedidos realizados pelo WhatsApp ou balcão, a forma de pagamento deve ser registrada como dinheiro, cartão ou Pix. Para pedidos realizados pelo iFood ou Keeta, não é necessário registrar a forma específica utilizada pelo cliente, pois essa informação não faz parte da necessidade identificada para o sistema.
+O arquivo fornecido para a implementação está disponível no [script SQL do projeto](cinthie_confeitaria-2.sql). A compatibilização integral do script com as regras de conversão abaixo ainda precisa ser validada.
 
-Não foram incluídas entidades de estoque ou ingredientes. A confeitaria não trabalha com estoque, pois a fabricação é realizada de acordo com a demanda e as encomendas, aos domingos e às quartas-feiras.
+### Principais regras de conversão
 
-O atributo `total_pedido` é derivado dos produtos associados ao pedido, considerando a quantidade e o preço unitário praticado em cada relação entre PEDIDO e PRODUTO. Essa decisão permite calcular o total sem depender apenas do preço atual cadastrado em PRODUTO.
+- Relacionamentos N:N → tabelas próprias com PK composta e FKs: `ITEM_PEDIDO`, `PEDIDO_FUNCIONARIO`, `COMPRA_INSUMO`.
+- Relacionamentos 1:N → chave estrangeira no lado N (`PEDIDO.id_cliente`, `PAGAMENTO.id_pedido`, por exemplo).
+- Relacionamento 1:1 opcional `PAGAMENTO`–`ESTORNO` → FK `ESTORNO.id_pagamento` com restrição `UNIQUE`.
+- `total_pedido`, `subtotal`, `total_compra` e `subtotal_compra` são derivados, calculados por consultas (não armazenados como dados redundantes).
+- Para PEDIDO de PLATAFORMA, `id_plataforma` é informado; não se gera PAGAMENTO interno.
+
+### Estado da Entrega 2
+
+Esta revisão cobre **DER, dicionário de dados, conversão inicial e modelo lógico**. Ainda são tarefas distintas a serem concluídas e validadas para a entrega integral: implementação SQL testada, massa de dados fictícios, consultas gerenciais/auditoria, normalização documentada e pitch. Não apresentar esta revisão isolada como a Entrega 2 completa.
 
 ---
 
@@ -197,8 +319,42 @@ O atributo `total_pedido` é derivado dos produtos associados ao pedido, conside
 |---|---|
 | Ferramenta e etapa | ChatGPT/Codex foi utilizado para organizar informações da entrevista, revisar requisitos, discutir regras de negócio, identificar inconsistências e apoiar a elaboração do DER e deste README. |
 | Motivação | Estruturar o trabalho conforme as orientações da disciplina, melhorar a coerência entre as seções e revisar a modelagem conceitual. |
-| Prompt(s) utilizados | Foram utilizados prompts para revisar o README, identificar possíveis erros, representar diretamente a relação entre PEDIDO e PRODUTO conforme orientação do professor, corrigir o tratamento de balcão e plataformas e ajustar funcionários, pagamentos e produção sob demanda. |
+| Prompt(s) utilizados | O texto exato dos prompts da fase inicial não foi preservado neste repositório; não é adequado reconstruí-los como se fossem transcrições. Registrar abaixo prompts documentados a partir desta revisão, com data e finalidade. |
 | Sugestões recebidas | Foram sugeridas revisões de entidades, relacionamentos, cardinalidades, requisitos, regras de negócio e redação. |
-| Trechos rejeitados ou corrigidos | Foram corrigidas sugestões anteriores que tratavam o motoboy como terceirizado, que incluíam controle de estoque e que criavam uma entidade intermediária entre PEDIDO e PRODUTO. Também foram revistas informações sobre canais de pedido e formas de pagamento. |
+| Trechos rejeitados ou corrigidos | Foram corrigidas sugestões anteriores que tratavam o motoboy como terceirizado, que incluíam controle de estoque e que criavam ITEM_PEDIDO diretamente no DER conceitual. No modelo lógico, a tabela associativa é necessária. Também foram revistas informações sobre canais de pedido e formas de pagamento. |
 | Justificativa da escolha final | O grupo manteve as decisões compatíveis com a entrevista, com as informações posteriormente confirmadas sobre o funcionamento da confeitaria e com a orientação do professor para a modelagem conceitual. |
 | Reflexão crítica | A IA foi utilizada como ferramenta de apoio à organização e revisão do trabalho. As informações sobre a organização foram obtidas na pesquisa de campo, e o grupo permaneceu responsável por verificar as sugestões e decidir quais alterações eram compatíveis com a realidade observada. |
+
+### 8.1 Registro verificável da revisão assistida por IA
+
+- **Data:** 30/10/2026.
+- **Ferramenta:** ChatGPT.
+- **Prompt do usuário (resumo fiel do pedido recebido nesta revisão, não transcrição da primeira fase):** "Corrija o README e remova uma integrante da lista de participantes", acompanhado da avaliação detalhada do professor e dos critérios de desconto.
+- **Material de entrada:** `README.md` do projeto e parecer com critérios 1 a 12, lacunas de processos, regras de negócio, dicionário e uso de IA.
+- **Saída adotada:** retirada de uma integrante da lista; ampliação de processos e fluxos; separação entre regras operacionais, fatos organizacionais e políticas a validar; explicitação das limitações do DER e do escopo.
+- **Conferência humana necessária:** validar os detalhes ainda desconhecidos de agendamento, fornecedores, cancelamentos e reembolsos, entrega, impostos e uso de dados pessoais com a responsável e o professor; revisar esta versão antes da entrega.
+- **Propostas não adotadas automaticamente:** inventar porcentagem de sinal ou novas condições de devolução, prazo fixo de encomenda, tarifas de entrega ou fornecedores inexistentes no levantamento.
+
+### 8.2 Complemento do levantamento durante a revisão
+
+- **Informações fornecidas pelo grupo:** a confeitaria dispõe de mesas para consumo; os aplicativos recebem apenas pedidos para entrega no dia; as encomendas são feitas pelo WhatsApp, com pagamento antecipado; cancelamentos das encomendas via WhatsApp, inclusive quando solicitados com menos de sete dias de antecedência da entrega, têm devolução integral (100%) do valor antecipadamente pago, sem ônus para cliente e estabelecimento.
+- **Interpretação documental:** a regra foi atualizada para explicitar que o prazo de sete dias **não impõe retenção ou multa**; tanto antes quanto dentro dos sete dias prévios à entrega, o reembolso informado é de 100% do pagamento antecipado. A forma e o prazo operacional do estorno ainda precisam ser definidos.
+- **Alteração aplicada:** atualização da caracterização, dos processos, do fluxo e das regras; posterior revisão do DER em 05/11/2026, em conjunto com o dicionário e o modelo lógico.
+
+> **Transparência:** os prompts originais anteriores à revisão não constam dos arquivos fornecidos. Para documentar o histórico completo, anexar suas transcrições originais quando disponíveis; não substituir por exemplos fictícios.
+
+---
+
+## 9. Dicionário de Dados e Arquivos
+
+- [Dicionário de dados atualizado em HTML](dicionario-dados.html).
+- [DER conceitual corrigido em PNG](assets/der_conceitual_corrigido.png).
+- [Script SQL do projeto](cinthie_confeitaria-2.sql).
+
+### 9.1 Registro da revisão de 05/11/2026 com apoio de IA
+
+- **Solicitação do grupo:** corrigir modelagem de compras e insumos, representar `total_pedido` como atributo derivado externo, registrar estornos e atualizar a conversão N:N para o modelo lógico.
+- **Correção adicional fornecida pelo grupo:** cancelamentos em WhatsApp, balcão e pagamentos via maquininha não têm cobrança de taxa; pagamentos, cancelamentos e estornos por aplicativos continuam nos próprios apps.
+- **Solução adotada:** inclusão de COMPRA, INSUMO e ESTORNO; cardinalidades financeiras revisadas; totais calculados; modelo lógico com tabelas associativas; documentos compatibilizados.
+- **Limites preservados:** não se presumem taxa de aplicativo, forma de reembolso do balcão, fornecedor, saldo de estoque nem volume mensal de compras; essas informações precisam de confirmação com a organização.
+- **Ferramenta:** ChatGPT, em 05/11/2026, como assistência para a modelagem e revisão documental. Todo material deve ser validado pelo grupo antes da entrega.
