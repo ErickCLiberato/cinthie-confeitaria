@@ -53,9 +53,6 @@ Como evidências da pesquisa de campo, foram realizadas fotografias do estabelec
 
 **Endereço do estabelecimento:** R. Césario Galero, 262, Tatuapé — São Paulo — SP, CEP 03071-000.
 
-**Contato comercial:** não informado; incluir apenas após confirmação com a responsável.
-
-**Fonte primária:** entrevista presencial e registros fotográficos descritos pelo grupo. Os pontos ainda não confirmados estão explicitamente sinalizados abaixo.
 
 ---
 
