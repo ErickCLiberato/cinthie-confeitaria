@@ -39,6 +39,39 @@ Atualmente, as informações da organização estão distribuídas entre WhatsAp
 
 O sistema proposto busca centralizar os dados de clientes, pedidos, produtos, pagamentos diretos, eventuais estornos, plataformas, funcionários, insumos e compras, reduzindo o tempo gasto na consolidação de informações.
 
+#### Empresa e projeto
+
+**Como funciona atualmente — Cinthiê Confeitaria.** Conforme a explicação fornecida pelo grupo, o controle administrativo é feito em planilhas Excel. Os pedidos chegam pelo WhatsApp, balcão, iFood e Keeta, deixando informações distribuídas entre canais. A conferência e a organização administrativa são realizadas ao final do expediente e incluem pagamentos e repasses das plataformas.
+
+**O que propomos — projeto do grupo.** Um banco de dados para centralizar os registros de clientes, pedidos, produtos, pagamentos diretos, plataformas e funcionários envolvidos. As consultas SQL permitem buscar e relacionar essas informações. A estrutura também inclui compras, insumos e estornos diretos, conforme o modelo já documentado.
+
+| Situação identificada pelo grupo | Melhoria proposta no banco |
+|---|---|
+| Informações de clientes em controles diferentes | Cadastro em `cliente`, relacionado aos pedidos quando houver cliente identificado. |
+| Pedidos recebidos por vários canais | `pedido` com identificação do canal e da plataforma, quando aplicável. |
+| Necessidade de relacionar produtos aos pedidos | `item_pedido` com produto, quantidade e preço praticado na venda. |
+| Conferência de pagamentos diretos | `pagamento` com valor, data e forma de pagamento; `estorno` quando houver devolução. |
+| Vendas pelo iFood e Keeta | `plataforma` vinculada ao pedido; pagamentos e estornos continuam nos aplicativos. |
+| Participação dos funcionários nos pedidos | `pedido_funcionario` com o papel de cada participante. |
+| Consulta em diferentes controles | Consultas SQL sobre os registros centralizados. |
+
+**Nomes no conceitual e no SQL:** o relacionamento CONTÉM é representado pela tabela lógica `item_pedido`; a participação de funcionários é representada por `pedido_funcionario`. Portanto, `CONTEM` e `PARTICIPA_PEDIDO` não são nomes de tabelas do script atual.
+
+**Exemplo para explicar ao professor.** Um cliente encomenda um bolo pelo WhatsApp. No funcionamento atual, as informações podem ser acompanhadas em controles diferentes. Na proposta do grupo, o registro relaciona:
+
+1. O cliente em `cliente`.
+2. A encomenda, sua data prevista e situação em `pedido`.
+3. O bolo e sua quantidade em `item_pedido`, vinculado a `produto`.
+4. O preço unitário praticado na encomenda, preservado em `item_pedido`.
+5. O pagamento antecipado, seu valor e forma de recebimento em `pagamento`.
+6. O funcionário envolvido e seu papel em `pedido_funcionario`.
+
+Assim, as informações registradas podem ser consultadas em conjunto por SQL. Esses registros precisam ser inseridos no banco; não há integração automática com o WhatsApp.
+
+**O que o projeto ainda não faz.** A entrega atual é uma estrutura de banco de dados com script e consultas, sem telas para os funcionários utilizarem. Ela não importa pedidos automaticamente do WhatsApp, iFood ou Keeta, não controla estoque em tempo real, não substitui automaticamente as planilhas e não realiza pagamentos nem entregas. A conferência de repasses existe na rotina administrativa descrita pelo grupo, mas o banco atual não registra repasses ou taxas dos aplicativos.
+
+Telas e integrações podem ser desenvolvidas futuramente usando o banco como base. Isso não elimina a pendência de validar a cobertura dos dados exigida pelo professor: representar os dados de um processo e automatizar sua execução são trabalhos diferentes.
+
 #### Justificativa da escolha
 
 A Cinthiê Confeitaria foi escolhida por ser uma organização real de pequeno porte e por permitir ao grupo a realização de pesquisa de campo. O estabelecimento possui uma rotina que envolve atendimento ao cliente, recebimento de pedidos por diferentes canais, fabricação sob demanda, pagamentos, entregas e controle administrativo, o que possibilita identificar entidades, atributos e relacionamentos relevantes para a elaboração de um modelo conceitual de dados.
@@ -562,6 +595,8 @@ Transcrições de solicitações presentes na conversa com o Codex:
 | Reflexão crítica | A IA não substitui a visita, a confirmação do escopo ou a revisão do professor. Um script executável não prova que o banco representa todos os processos da organização. |
 
 Também foram acrescentadas, em solicitação anterior desta conversa, duas linhas explicativas às 17 consultas de conferência. Prompt: “No repositório ErickCLiberato/cinthie-confeitaria, confira se todos os processos de negócio no README.md estão numerados em sequência. Depois, no arquivo cinthie_confeitaria-2.sql, acrescente duas linhas de comentários antes de cada consulta da parte de SELECT, explicando de forma simples o que ela mostra e para que serve.” A numeração já estava correta; foram mantidas as consultas e acrescentados 34 comentários.
+
+Complemento fornecido pelo grupo nesta conversa: explicação intitulada “Diferença entre a empresa e o nosso projeto”, com melhorias propostas, exemplo de encomenda WhatsApp e limites da implementação. O texto foi incorporado ao relatório e ao roteiro, ajustando os nomes das tabelas ao SQL e distinguindo o controle administrativo de repasses da ausência desses registros no banco. Nenhuma consulta ou regra SQL foi alterada nessa complementação. A explicação não fornece data ou identificação da entrevistada nem substitui os dados de entrevista ainda pendentes.
 
 ## 7. Apresentação Corporativa Final
 
