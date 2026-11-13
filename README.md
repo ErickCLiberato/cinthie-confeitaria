@@ -496,7 +496,6 @@ Além dos exemplos anteriores, a massa acrescenta 10 clientes, 6 produtos, 24 pe
 | Foto existente da visita | [assets/imagem.jpeg](assets/imagem.jpeg) |
 | SQL e massa fictícia | [cinthie_confeitaria-2.sql](cinthie_confeitaria-2.sql) |
 | Validação | [docs/validacao.md](docs/validacao.md) |
-| Roteiro da apresentação | [docs/roteiro_apresentacao.md](docs/roteiro_apresentacao.md) |
 
 O histórico de alterações está disponível nos commits do repositório.
 
@@ -529,6 +528,6 @@ Na revisão de 13/11/2026, a numeração dos processos foi conferida e foram acr
 
 ## 7. Apresentação Corporativa Final
 
-O [roteiro de oito minutos](docs/roteiro_apresentacao.md) apresenta o problema, a solução, o modelo lógico, a execução do SQL, as consultas gerenciais e de auditoria, o uso dos dados em BI e os benefícios para a organização.
+A apresentação de oito minutos aborda o problema, a solução, o modelo lógico, a execução do SQL, as consultas gerenciais e de auditoria, o uso dos dados em BI e os benefícios para a organização.
 
 A demonstração usa a massa fictícia e as consultas do repositório, com destaque para vendas por período, recebimentos diretos, compras e conferência de reembolsos.
