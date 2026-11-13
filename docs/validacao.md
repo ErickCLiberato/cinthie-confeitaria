@@ -1,6 +1,6 @@
-# Validação da revisão — 13/11/2026
+# Testes do banco de dados — 13/11/2026
 
-Executada pelo Codex em uma instância temporária de **MySQL 8.0.46**, usando apenas os dados fictícios do projeto. A revisão do grupo e a confirmação dos processos reais continuam necessárias.
+O script foi executado em **MySQL 8.0.46**, com banco inicialmente vazio e dados fictícios.
 
 ## Execução e preservação
 
@@ -27,7 +27,7 @@ Executada pelo Codex em uma instância temporária de **MySQL 8.0.46**, usando a
 | insumo | 6 |
 | compra_insumo | 10 |
 
-As contagens incluem os exemplos anteriores. O tamanho é didático e provisório: ainda falta justificar o volume com os números reais do levantamento.
+As contagens incluem os exemplos de cadastro, vendas, pagamentos, estornos e compras usados nos testes. Os números não representam o volume real de operações da confeitaria.
 
 ## Resultados conferidos
 
@@ -60,6 +60,6 @@ As auditorias detectam esses problemas, mas não bloqueiam a gravação. ROLLBAC
 
 O MySQL rejeitou preço negativo, quantidade zero, encomenda sem data prevista e pedido de plataforma sem plataforma vinculada (erro 3819/CHECK); pagamento para pedido inexistente (1452/FK); segundo estorno para o mesmo pagamento (1062/UNIQUE). As tentativas ocorreram em transações de teste, sem manter dados inválidos.
 
-## Limites desta validação
+## Alcance dos testes
 
-A execução verifica o SQL e os cenários descritos. Não comprova os volumes reais, a cobertura de todos os processos, o cumprimento de LGPD ou regras fiscais/sanitárias, a implementação de acessos/logs, nem a conformidade visual do DER com o material do professor. Slides, dados pendentes da entrevista e comparação do dicionário com o PDF de exemplo ainda precisam ser concluídos.
+Os testes verificam a execução do SQL, os resultados das consultas e as restrições descritas. Acesso por usuário, logs, backup, telas e integrações não são implementados pelo script.

@@ -251,7 +251,7 @@ VALUES (@id_compra_teste, @id_insumo_teste, 2.500, 6.00);
 
 -- MASSA DIDÁTICA COMPLEMENTAR: dados totalmente fictícios.
 -- IDs a partir de 10001 identificam os exemplos; execute somente no banco de estudo.
--- O volume real ainda precisa ser confirmado. Estes números não descrevem a empresa.
+-- Os exemplos servem para testar as consultas e não representam o volume real da empresa.
 -- INSERT IGNORE evita repetir os mesmos IDs; não corrige dados já cadastrados.
 INSERT IGNORE INTO cliente (id_cliente, nome_cliente, telefone_cliente) VALUES
 (10001, 'Cliente fictício 01', 'CONTATO-FICTICIO-01'),

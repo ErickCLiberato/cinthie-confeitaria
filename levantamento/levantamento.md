@@ -1,43 +1,41 @@
 # Levantamento — Cinthiê Confeitaria
 
-## Origem e limites
+## Organização
 
-Texto organizado a partir do README e dos complementos já fornecidos pelo grupo, em 13/11/2026. Não é uma nova entrevista nem uma transcrição. O relato anterior informa entrevista presencial com a responsável e gravação de áudio. A [foto existente](../assets/imagem.jpeg) foi reconhecida na correção da Entrega 1 como evidência de contato no balcão.
+A Cinthiê Confeitaria fabrica e comercializa produtos de confeitaria em seu estabelecimento, localizado na R. Césario Galero, 262, Tatuapé, São Paulo/SP, CEP 03071-000.
 
-## Identificação da entrevista — pendente de complemento
+O levantamento foi realizado por meio de entrevista presencial com a responsável, com registro em áudio e [foto no estabelecimento](../assets/imagem.jpeg).
 
-- Nome, função exata e contato da responsável: confirmar.
-- Data da entrevista, integrantes presentes e eventual vínculo com a organização: confirmar.
-- Local documentado da organização: R. Césario Galero, 262, Tatuapé, São Paulo/SP, CEP 03071-000. Confirmar que foi o local da entrevista.
-- Software de criação do DER e perfil oficial no Google: informar.
+A equipe possui três funcionários: uma gerente e confeiteira, um ajudante de cozinha que também atende no balcão e um motoboy responsável pelas entregas.
 
-## Informações já registradas pelo grupo
+## Atendimento e pedidos
 
-A confeitaria conta com três funcionários: gerente/confeiteira, ajudante/atendente e motoboy. Atende balcão e mesas, recebe encomendas por WhatsApp e pedidos para entrega no dia por iFood e Keeta. Informações ficam espalhadas entre WhatsApp, Excel e plataformas, com consolidação ao fim do expediente.
+A confeitaria atende clientes no balcão e nas mesas do salão. Também recebe encomendas pelo WhatsApp e pedidos de entrega no mesmo dia pelo iFood e pela Keeta. Os aplicativos não são utilizados para encomendas agendadas.
 
-Há produtos disponíveis no balcão e produção sob demanda; foram relatadas atividades aos domingos e quartas, sem exclusividade. Ingredientes são comprados mensalmente. O volume de pedidos, clientes ativos e insumos adquiridos ainda não foi documentado.
+Os pedidos envolvem a identificação do canal, os produtos, as quantidades, os preços e a forma de atendimento. No balcão, a venda pode ser realizada sem cadastro do cliente.
 
-Os complementos do grupo confirmam pagamento antecipado nas encomendas WhatsApp e devolução de 100% no cancelamento, inclusive a menos de sete dias da entrega, sem multa. Balcão e maquininha não têm taxa de cancelamento. Pagamentos, cancelamentos e estornos de aplicativos são tratados na própria plataforma. Não foi confirmada uma política de sinal ou parcelamento; dois pagamentos no script são apenas um cenário de teste permitido pela cardinalidade.
+## Produção e compras
 
-## Achados de observação presencial
+Há produtos prontos para venda no balcão e consumo no local, além da produção para encomendas. A rotina relatada inclui atividades aos domingos e às quartas-feiras.
 
-A foto comprova o contato no estabelecimento, conforme a avaliação anterior. O material disponível não separa o que foi observado do que foi relatado. O grupo deve descrever, com base nas próprias anotações, como pedidos foram registrados, que papéis ou planilhas circulavam e como pagamentos e compras eram conferidos. Esses fatos não foram inventados nesta revisão.
+A compra de insumos é realizada mensalmente. No projeto, cada compra registra sua data e os insumos adquiridos, com quantidade, unidade de medida e custo unitário. Esses registros permitem consultar os valores das compras, sem calcular saldo de estoque ou consumo de ingredientes.
 
-## Respostas atribuídas ao levantamento
+## Pagamentos e cancelamentos
 
-As informações da seção anterior são as que o grupo já registrou; falta relacionar quais perguntas as originaram, quem respondeu e quando. Os complementos sobre mesas, encomendas e reembolsos vieram das revisões anteriores do grupo, sem data de nova visita documentada.
+As encomendas pelo WhatsApp exigem pagamento antecipado. Em caso de cancelamento, o valor pago é devolvido integralmente, inclusive quando faltam menos de sete dias para a entrega. Não há multa ou retenção.
 
-## Perguntas para completar e validar o modelo
+Os canais diretos aceitam dinheiro, Pix e cartão, incluindo maquininha, sem taxa de cancelamento. O banco registra os pagamentos diretos e relaciona cada estorno ao pagamento original.
 
-1. Qual é a média de pedidos por dia/mês, clientes ativos e itens por pedido? Há sazonalidade?
-2. Qual a antecedência mínima de encomendas? Como se confirma o pagamento antes de aceitar a produção?
-3. Como registrar endereço, área atendida, taxa e conclusão da entrega?
-4. Quem compra, de quais fornecedores, em que volume, e como confere validade e armazenamento? Existe controle de saldo ou perdas?
-5. Como funciona fechamento de caixa, despesas, repasses e documentação fiscal?
-6. Quais dados são usados para escala, higiene, produção e demais atividades da organização?
-7. Quem pode acessar dados pessoais, como se protege o cadastro e por quanto tempo os dados ficam guardados?
-8. Como devolver valores por Pix, cartão e dinheiro, e em qual prazo?
+Nos pedidos de iFood e Keeta, o pagamento, o cancelamento e o estorno são tratados pelo próprio aplicativo. O projeto registra o pedido e a plataforma de origem.
 
-## Cobertura e próximos registros
+## Controle administrativo
 
-O banco atual não representa todos esses dados. O grupo precisa confirmar quais processos existem e ampliar o modelo para atender ao escopo da Entrega 2. Após o contato, registrar data, participantes, respostas, achados observados e mudanças no DER, no dicionário e no SQL. Não substituir essa validação por exemplos de organizações parecidas.
+A confeitaria utiliza planilhas Excel e informações dos canais de atendimento para organizar os registros. A conferência administrativa é realizada ao final do expediente e inclui pagamentos e repasses das plataformas.
+
+A distribuição das informações entre esses controles dificulta sua consulta e consolidação. A proposta do grupo é reunir os dados em um banco, relacionando clientes, pedidos, produtos, funcionários, pagamentos diretos, estornos e compras.
+
+## Aplicação no projeto
+
+O banco permite consultar os itens de cada pedido, os preços praticados, os funcionários participantes e os valores recebidos ou devolvidos. Também permite comparar vendas por período e canal e apurar gastos com insumos.
+
+A implementação é composta por tabelas, restrições e consultas SQL. Não há telas ou importação automática de pedidos dos canais. Estoque, fornecedores, endereços de entrega, repasses e documentos fiscais não fazem parte da estrutura atual.

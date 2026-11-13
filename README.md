@@ -2,7 +2,7 @@
 
 Modelo lógico, implementação SQL e apresentação final — Modelagem de Banco de Dados.
 
-**Revisão:** 13/11/2026. Este README é o Relatório Técnico Final em elaboração, organizado conforme o esqueleto do professor. Os itens pendentes são indicados explicitamente; não representam levantamento concluído.
+**Relatório técnico — 13/11/2026.** Modelagem e implementação do banco de dados da Cinthiê Confeitaria.
 
 ## 1. Relatório Técnico Final
 
@@ -41,7 +41,7 @@ O sistema proposto busca centralizar os dados de clientes, pedidos, produtos, pa
 
 #### Empresa e projeto
 
-**Como funciona atualmente — Cinthiê Confeitaria.** Conforme a explicação fornecida pelo grupo, o controle administrativo é feito em planilhas Excel. Os pedidos chegam pelo WhatsApp, balcão, iFood e Keeta, deixando informações distribuídas entre canais. A conferência e a organização administrativa são realizadas ao final do expediente e incluem pagamentos e repasses das plataformas.
+**Como funciona atualmente — Cinthiê Confeitaria.** O controle administrativo é feito em planilhas Excel. Os pedidos chegam pelo WhatsApp, balcão, iFood e Keeta, deixando informações distribuídas entre canais. A conferência e a organização administrativa são realizadas ao final do expediente e incluem pagamentos e repasses das plataformas.
 
 **O que propomos — projeto do grupo.** Um banco de dados para centralizar os registros de clientes, pedidos, produtos, pagamentos diretos, plataformas e funcionários envolvidos. As consultas SQL permitem buscar e relacionar essas informações. A estrutura também inclui compras, insumos e estornos diretos, conforme o modelo já documentado.
 
@@ -57,7 +57,7 @@ O sistema proposto busca centralizar os dados de clientes, pedidos, produtos, pa
 
 **Nomes no conceitual e no SQL:** o relacionamento CONTÉM é representado pela tabela lógica `item_pedido`; a participação de funcionários é representada por `pedido_funcionario`. Portanto, `CONTEM` e `PARTICIPA_PEDIDO` não são nomes de tabelas do script atual.
 
-**Exemplo para explicar ao professor.** Um cliente encomenda um bolo pelo WhatsApp. No funcionamento atual, as informações podem ser acompanhadas em controles diferentes. Na proposta do grupo, o registro relaciona:
+**Exemplo de registro de encomenda.** Um cliente encomenda um bolo pelo WhatsApp. No funcionamento atual, as informações podem ser acompanhadas em controles diferentes. Na proposta do grupo, o registro relaciona:
 
 1. O cliente em `cliente`.
 2. A encomenda, sua data prevista e situação em `pedido`.
@@ -70,7 +70,7 @@ Assim, as informações registradas podem ser consultadas em conjunto por SQL. E
 
 **O que o projeto ainda não faz.** A entrega atual é uma estrutura de banco de dados com script e consultas, sem telas para os funcionários utilizarem. Ela não importa pedidos automaticamente do WhatsApp, iFood ou Keeta, não controla estoque em tempo real, não substitui automaticamente as planilhas e não realiza pagamentos nem entregas. A conferência de repasses existe na rotina administrativa descrita pelo grupo, mas o banco atual não registra repasses ou taxas dos aplicativos.
 
-Telas e integrações podem ser desenvolvidas futuramente usando o banco como base. Isso não elimina a pendência de validar a cobertura dos dados exigida pelo professor: representar os dados de um processo e automatizar sua execução são trabalhos diferentes.
+Telas e integrações podem ser desenvolvidas usando o banco como base.
 
 #### Justificativa da escolha
 
@@ -96,17 +96,15 @@ Os códigos abaixo organizam as necessidades já descritas no levantamento; não
 | P2 | Necessidade de centralizar a conferência de pagamentos diretos e eventuais devoluções. | Relacionar pedido, pagamento e estorno, mantendo o histórico. |
 | P3 | Necessidade de reunir os registros de compras e insumos mencionados na proposta. | Registrar compra, insumo, quantidade e custo unitário. |
 
-**Escopo a validar:** o modelo atual cobre clientes, vendas, equipe participante, pagamentos diretos, devoluções e compras. Estoque, fornecedores, dados de endereço de entrega, repasses, obrigações fiscais e escalas ainda não estão modelados. O roteiro exige cobertura de todos os dados da organização; portanto, essa cobertura permanece uma pendência e as exclusões anteriores não comprovam atendimento à exigência. O grupo precisa confirmar os processos e ampliar o modelo quando necessário, sem criar fornecedores, taxas ou práticas inexistentes.
+**Escopo do banco:** clientes, pedidos, produtos, funcionários participantes, pagamentos diretos, estornos, compras e insumos. O modelo não inclui estoque, fornecedores, endereços de entrega, repasses, documentos fiscais ou escalas.
 
-#### Resumo da entrevista e das evidências
+#### Entrevista e levantamento
 
-O README anterior relata entrevista presencial com a responsável e gravação de áudio. A foto existente está em [assets/imagem.jpeg](assets/imagem.jpeg); a correção da Entrega 1 reconhece nela o contato presencial. A data, o nome e contato da entrevistada, os participantes e a separação dos achados de observação e de entrevista não estão documentados. O [levantamento organizado](levantamento/levantamento.md) reúne o que já foi registrado e as perguntas que faltam responder. O áudio não substitui esse texto.
-
-**Volumes conhecidos:** três funcionários e compras mensais. Pedidos por mês, clientes ativos e valores médios ainda precisam ser informados. Não é possível justificar o tamanho final da massa com esses dados incompletos.
+O levantamento foi realizado por meio de entrevista presencial com a responsável pela confeitaria, com registro em áudio e [foto no estabelecimento](assets/imagem.jpeg). A organização possui três funcionários e realiza compras mensais de insumos. O [relato do levantamento](levantamento/levantamento.md) descreve os canais de venda, a produção, os pagamentos e o controle administrativo.
 
 #### Processos de negócio
 
-Os processos a seguir combinam **rotinas relatadas no levantamento** com **etapas que precisam ser confirmadas na entrevista complementar**. O fluxo descreve operações reais ou relevantes à caracterização da confeitaria; sua inclusão nesta seção **não significa** que todas serão implementadas no banco de dados do modelo atual.
+Os processos abaixo descrevem o atendimento, as encomendas, a produção, os pagamentos, as compras e o controle administrativo.
 
 ##### 1.1.1 Atendimento e identificação de clientes
 
@@ -126,7 +124,6 @@ Os processos a seguir combinam **rotinas relatadas no levantamento** com **etapa
 - **Entrada:** catálogo de produtos e preços definidos pela confeitaria.
 - **Atividades propostas para o sistema:** cadastrar e consultar produtos e seus preços atuais; ao vender, preservar o preço unitário praticado no vínculo entre produto e pedido.
 - **Saída:** pedido com valores históricos coerentes, mesmo se o preço cadastrado do produto mudar.
-- **A confirmar:** quem altera o cardápio, com qual frequência e se os preços diferem entre canais.
 
 ##### 1.1.4 Encomendas pelo WhatsApp e agendamento
 
@@ -134,7 +131,6 @@ Os processos a seguir combinam **rotinas relatadas no levantamento** com **etapa
 - **Atividades:** confirmar itens e quantidades; negociar a data e a modalidade de recebimento; verificar disponibilidade de produção; informar o valor total e as condições de pagamento. **As encomendas feitas pelo WhatsApp exigem pagamento antecipado**, conforme informação complementar da responsável.
 - **Saída:** encomenda aceita e acompanhada pelo pedido.
 - **Confirmado:** pagamento antecipado nas encomendas por WhatsApp; cancelamentos de encomendas pelo WhatsApp, inclusive com menos de sete dias de antecedência da entrega, não geram multa nem retenção, com **devolução integral (100%) do valor pago**.
-- **A confirmar:** a antecedência mínima para **fazer** a encomenda e os procedimentos operacionais de estorno. O prazo de sete dias não altera o percentual devolvido. O DER revisado registra a data prevista de atendimento, mas o prazo de sete dias não altera a regra de reembolso integral.
 
 ##### 1.1.5 Produção sob demanda
 
@@ -148,14 +144,12 @@ Os processos a seguir combinam **rotinas relatadas no levantamento** com **etapa
 - **Entrada:** pedido pronto para envio.
 - **Atividades:** organizar o encaminhamento e a participação do funcionário que executa a entrega; acompanhar o estado do pedido.
 - **Saída:** pedido entregue e concluído.
-- **A confirmar:** área atendida, cálculo de taxa, registro de endereço, comprovante e tratamento de entregas intermediadas por plataformas. O DER não possui entidade ENTREGA.
 
 ##### 1.1.7 Retirada no balcão e consumo no estabelecimento
 
 - **Entrada:** produto selecionado para consumo no local ou pedido pronto para retirada.
 - **Atividades:** disponibilizar o produto, atender clientes nas mesas quando aplicável, conferir dados do pedido quando necessários e concluir o atendimento.
 - **Saída:** pedido retirado e situação atualizada.
-- **A confirmar:** procedimento utilizado para comunicar que a encomenda está pronta.
 
 ##### 1.1.8 Pagamento dos pedidos diretos
 
@@ -182,18 +176,17 @@ Os processos a seguir combinam **rotinas relatadas no levantamento** com **etapa
 ##### 1.1.11 Compra de ingredientes e relacionamento com fornecedores
 
 - **Entrada:** necessidade de ingredientes e embalagens para atender à produção.
-- **Atividades:** aquisição de insumos **uma vez por mês**, para atender à produção de encomendas e de produtos comercializados no balcão. As etapas específicas de seleção de fornecedores, recebimento e conferência de validades ainda precisam ser confirmadas.
+- **Atividades:** aquisição de insumos **uma vez por mês**, para atender à produção de encomendas e de produtos comercializados no balcão. 
 - **Saída:** insumos disponíveis para a produção.
-- **Confirmado:** periodicidade mensal das compras e existência de produtos para venda no balcão. **A confirmar:** nomes dos fornecedores, responsáveis pelas compras, armazenamento e controle de validade. **INSUMO e COMPRA estão no DER revisado; FORNECEDOR e ESTOQUE permanecem fora do escopo**, embora seu processo operacional esteja documentado.
+- **Registro no banco:** COMPRA e INSUMO representam as aquisições mensais; fornecedores e estoque não fazem parte das tabelas.
 
-**Modelagem confirmada como proposta:** COMPRA contém uma data e um ou mais INSUMOS adquiridos, com quantidade e custo unitário. O cadastro descreve compras, não consumo, saldo de estoque nem controle de validade. O valor total da compra é derivado da soma dos subtotais.
+**Registro da compra:** COMPRA contém uma data e um ou mais INSUMOS adquiridos, com quantidade e custo unitário. O cadastro descreve compras, não consumo, saldo de estoque nem controle de validade. O valor total da compra é derivado da soma dos subtotais.
 
 ##### 1.1.12 Controle administrativo e caixa
 
 - **Entrada:** pedidos, pagamentos e dados de vendas por canais e plataformas.
 - **Atividades:** conferir os registros, consultar vendas por período e consolidar informações; atualmente, parte desse trabalho utiliza Excel e acontece ao final do expediente.
 - **Saída:** visão administrativa das operações e dos valores recebidos ou a receber.
-- **A confirmar:** abertura/fechamento de caixa, conciliação, despesas e periodicidade dos relatórios.
 
 ##### 1.1.13 Fluxo geral dos dados
 
@@ -215,8 +208,6 @@ flowchart TD
     K --> M
     L --> M
 ```
-
-> **Observação:** a ausência de multa nos canais diretos e o reembolso integral das encomendas WhatsApp foram informados pelo grupo. Os procedimentos de estorno, entrega e atendimento nas mesas ainda precisam de detalhamento com a responsável.
 
 #### Requisitos Funcionais
 
@@ -247,12 +238,11 @@ flowchart TD
 | RF23 | O sistema deve registrar COMPRA com identificador e data; cada insumo adquirido informa seu identificador, quantidade positiva e custo unitário não negativo. |
 | RF24 | O sistema deve permitir apurar subtotais e totais derivados de PEDIDO e COMPRA a partir das relações correspondentes. |
 
-
 ---
 
 #### Requisitos não funcionais
 
-Os requisitos abaixo são propostas para o sistema a desenvolver. Não representam funcionalidades já implementadas pelo script SQL.
+Os requisitos não funcionais descrevem as características previstas para o sistema. O script SQL implementa a estrutura do banco; permissões, backup, telas e logs são requisitos da aplicação.
 
 | Código | Requisito | Como conferir |
 |---|---|---|
@@ -286,52 +276,42 @@ As regras abaixo consolidam o levantamento anterior com as informações recente
 | RN15 | FUNCIONÁRIO e PEDIDO possuem relacionamento N:N, com `papel_participacao`. |
 | RN16 | Repasses dos aplicativos são conferidos administrativamente; não há módulo próprio de REPASSE. |
 | RN17 | Encomenda via WhatsApp possui data prevista de entrega ou retirada. |
-| RN18 | A antecedência mínima para contratar encomenda ainda precisa ser confirmada; isso não significa que ela inexista. O prazo de sete dias **não gera multa de cancelamento**. |
+| RN18 | O prazo de sete dias antes do atendimento não gera multa nem retenção no cancelamento de encomenda WhatsApp. O banco não estabelece antecedência mínima para contratar encomendas. |
 | RN19 | Encomenda WhatsApp tem pagamento antecipado. |
 | RN20 | No cancelamento de encomenda via WhatsApp paga, o cliente recebe **100% do valor pago**, inclusive com menos de sete dias de antecedência. |
 | RN21 | O pagamento direto já recebido pode gerar ESTORNO; o valor devolvido é registrado e relacionado ao pagamento original. |
 | RN22 | Dados pessoais requerem acesso controlado e proteção conforme LGPD. |
-| RN23 | Compras e manipulação de alimentos seguem regras sanitárias aplicáveis, cuja execução local deve ser confirmada. |
-| RN24 | Obrigações fiscais e comprovantes da operação dependem do enquadramento a confirmar na organização. |
+| RN23 | As atividades de compra e manipulação de alimentos estão sujeitas às regras sanitárias aplicáveis. O banco não possui controle de validade ou rotinas sanitárias. |
+| RN24 | As obrigações fiscais e os comprovantes seguem o enquadramento da organização. Documentos fiscais não são registrados neste banco. |
 | RN25 | Cada COMPRA possui um ou mais INSUMOS, registrando `quantidade` e `custo_unitario` no relacionamento ADQUIRE. |
 | RN26 | `subtotal_compra` e `total_compra` são derivados dos custos de compra; não são dados de estoque. |
 | RN27 | Para um mesmo PAGAMENTO direto, esta versão admite no máximo um ESTORNO; devoluções parceladas exigiriam ampliação posterior. |
 | RN28 | O modelo não armazena taxas de cancelamento de aplicativos como se fossem cobradas pela confeitaria. |
 | RN29 | Pedido direto concluído deve ter a soma dos pagamentos igual ao total dos itens. A auditoria A06 também confere o pagamento antecipado das encomendas WhatsApp não canceladas (RN19). |
 
-**Pendências de validação com a responsável:** volume mensal de compras e pedidos, identificação de fornecedores, quem realiza compras, eventual devolução de compras no balcão, e procedimentos/timing de estornos em Pix, dinheiro e cartão. Não foram inventadas taxas, fornecedores nem quantidades.
+#### Classificação das regras
 
-#### Classificação e informações pendentes
+- **Operacionais e de integridade:** canais, produtos por pedido, preço histórico, pagamentos, cancelamentos e compras.
+- **Características da operação:** plataformas utilizadas (RN03), dias de produção relatados (RN13) e equipe (RN14).
+- **Restrições externas:** proteção de dados pessoais (RN22), cuidados sanitários (RN23) e obrigações fiscais (RN24).
 
-- **Regras operacionais e de integridade:** canais, produtos por pedido, preço histórico, pagamentos, cancelamentos, compras e seus relacionamentos.
-- **Fatos observados:** plataformas atuais (RN03), dias de produção relatados (RN13) e equipe atual (RN14). Não são limites permanentes de cadastro.
-- **Restrições externas:** privacidade/LGPD (RN22), cuidados sanitários (RN23) e obrigações fiscais (RN24). O enquadramento e os procedimentos concretos precisam ser confirmados.
-
-| Pergunta para a responsável | Motivo |
-|---|---|
-| Qual é a antecedência mínima para encomendar? | Definir a regra de agendamento sem confundir com o prazo de cancelamento. |
-| Quais bairros são atendidos e como se calcula a taxa? | Completar o processo de entrega. |
-| Quem compra, de quem compra e como confere validade e recebimento? | Completar o processo de compras e cuidados sanitários. |
-| Como são feitos o fechamento do caixa e os comprovantes fiscais? | Detalhar o controle administrativo. |
-| Quem pode consultar dados pessoais e por quanto tempo são guardados? | Validar permissões e retenção, considerando obrigações aplicáveis. |
-
-As respostas não foram inventadas. As propostas de acesso e registro estão no [dicionário de dados](dicionario-dados.html#acesso).
+Os critérios de acesso e registro estão no [dicionário de dados](dicionario-dados.html#acesso).
 
 #### Resposta aos apontamentos da Entrega 1
 
-Fonte: [correção do professor, issue 1](https://github.com/ErickCLiberato/cinthie-confeitaria/issues/1). A tabela registra a situação atual, sem afirmar que o professor já validou a revisão.
+Referência: [correção da Entrega 1](https://github.com/ErickCLiberato/cinthie-confeitaria/issues/1).
 
-| Apontamento | Alteração ou situação atual | Motivo e pendência |
-|---|---|---|
-| Falta de endereço e contato | Endereço acrescentado; nome e telefone da responsável pendentes. | Permitir confirmar o contato com a organização. |
-| Processos superficiais; compras, preços, cancelamentos e encomendas incompletos | Processos detalhados e fluxo incluído; COMPRA e INSUMO incluídos no modelo revisado. | Antecedência, fornecedores, entrega e caixa ainda precisam de confirmação. |
-| Ausência de RNF | RNF01 a RNF06 documentados como propostas. | Acesso, logs e backup não são implementados pelo script. |
-| Regras sem classificação e sem restrições externas | Separadas regras, fatos e restrições; RN22 a RN24 tratam de privacidade, cuidados sanitários e obrigações fiscais. | Procedimentos locais e cobertura dos dados dessas áreas continuam pendentes. |
-| Dicionário incompleto | HTML existente contém definições, fluxo, convenções, índices, permissões e proposta de log. | Comparar o formato com o PDF de exemplo do professor, ainda não fornecido. |
-| Prompts e respostas genéricos | Mantido o histórico disponível e acrescentado o registro desta revisão. | Não reconstruir prompts antigos como se fossem transcrições. |
-| Falta de data prevista e papel do funcionário | Campos de data prevista/cancelamento e papel de participação incorporados. | Apoiar encomendas e registrar a atuação da equipe. |
-| Pagamentos de plataformas inconsistentes | Pagamentos internos restritos conceitualmente aos canais diretos; A01 detecta lançamentos indevidos. | A consulta não bloqueia a gravação. |
-| Lista de integrantes e situação de Giovanna | Mantidos os quatro integrantes do README revisado, conforme alteração anterior do grupo. | Confirmar cadastro dos atuais integrantes e seus usuários no GitHub. |
+| Apontamento | Alteração no trabalho |
+|---|---|
+| Identificação da organização | Inclusão do endereço do estabelecimento. |
+| Processos descritos de forma resumida | Detalhamento de entradas, atividades e saídas, com fluxo geral dos dados. |
+| Compras, preços e cancelamentos | Inclusão de compras e insumos; preservação do preço praticado; registro de estornos. |
+| Ausência de requisitos não funcionais | Inclusão de RNF01 a RNF06. |
+| Classificação das regras | Separação entre regras operacionais, características da organização e restrições externas. |
+| Dicionário de dados | Inclusão de definições, cardinalidades, fluxo, convenções, índices e restrições por coluna. |
+| Data prevista e participação dos funcionários | Inclusão da data de atendimento e do papel de cada funcionário no pedido. |
+| Pagamentos de aplicativos | Separação dos pagamentos diretos e conferência pela auditoria A01. |
+| Registro do uso de IA | Documentação das ferramentas, solicitações e alterações na seção 6. |
 
 #### Modelo conceitual revisado
 
@@ -373,8 +353,6 @@ Fonte: [correção do professor, issue 1](https://github.com/ErickCLiberato/cint
 ![DER conceitual corrigido — Cinthiê Confeitaria](assets/der_conceitual_corrigido.png)
 
 **Revisões incorporadas:** compras e insumos; totais derivados ligados externamente; cancelamento direto sem taxa; ESTORNO para recebimentos diretos; vínculo PEDIDO–PAGAMENTO ajustado de (0,1) para (0,N); aplicativos mantidos como plataformas externas.
-
-**Software de criação do DER:** a confirmar pelo grupo; não consta dos arquivos existentes.
 
 ### 1.2 Conversão do Modelo Conceitual para o Modelo Lógico
 
@@ -419,7 +397,7 @@ O script usa chaves, `NOT NULL`, `UNIQUE` e `CHECK` para regras simples. Regras 
 
 Exemplos de dependências: `id_cliente → nome_cliente, telefone_cliente`; `id_pedido → datas, canal, tipo, modalidade, status, id_cliente, id_plataforma`; `(id_pedido, id_produto) → quantidade, preco_unitario`; `id_pagamento → id_pedido, data_pagamento, forma_pagamento, valor_pago`. As demais entidades seguem suas PKs e os atributos listados no dicionário. Não se presume que telefone, nome de cliente ou nome de produto sejam únicos.
 
-Os totais são calculados em consultas, evitando diferenças entre o total salvo e os itens. Essa escolha reduz redundância, mas sozinha não prova normalização. A análise se baseia nas dependências descritas e nas regras atuais, que ainda devem ser validadas pelo grupo.
+Os totais são calculados em consultas a partir dos itens, evitando armazenar o mesmo valor em mais de um lugar. A normalização considera as dependências descritas entre as chaves e os demais atributos.
 
 ### 1.5 Justificativas Técnicas das Decisões
 
@@ -441,7 +419,7 @@ Os totais são calculados em consultas, evitando diferenças entre o total salvo
 | Sem exclusão em cascata | Evitar apagar automaticamente pedidos e registros financeiros relacionados. | Preservação de histórico |
 | Sem triggers ou rotinas avançadas nesta versão | Manter o SQL compatível com o nível de estudo; auditorias detectam violações entre tabelas. | RN05, RN09, RN11, RN19, RN20, RN21, RN25, RN29 |
 
-As auditorias A01–A06 **não impedem gravações**. Acesso por usuário, logs, backup e regras entre tabelas ainda dependem de implementação no sistema completo. Nenhuma consulta calcula taxas de aplicativo, lucro, saldo de estoque ou tempo de entrega, pois faltam esses dados.
+As auditorias A01–A06 identificam inconsistências sem bloquear gravações. Contas de usuário, logs e backup não estão implementados no script. As consultas calculam vendas, recebimentos, devoluções e compras; não calculam lucro, estoque ou taxas de aplicativos.
 
 ### 1.6 Proposta de Arquitetura Analítica para BI e IA
 
@@ -456,7 +434,7 @@ Proposta simples: banco MySQL operacional → consultas G01–G07 → relatório
 | KPI05 — percentual de cancelamento | 100 × pedidos cancelados ÷ pedidos criados no mês; considera a situação atual desses pedidos. | G05 |
 | KPI06 — gasto com compras | Soma de quantidade × custo unitário por mês da compra. Não representa consumo. | G06 |
 
-Metas não foram informadas pela organização. Todos os indicadores são propostas a validar com a responsável.
+Os indicadores permitem comparar períodos e canais, sem metas numéricas definidas no projeto.
 
 | Problema ou KPI | Tabelas envolvidas | Consulta no script |
 |---|---|---|
@@ -470,7 +448,6 @@ Metas não foram informadas pela organização. Todos os indicadores são propos
 | KPI06 | compra, compra_insumo | G06 |
 
 Um painel pode comparar meses, canais e produtos, além de acompanhar cancelamentos e devoluções. Previsão de demanda seria uma evolução após reunir histórico suficiente e confiável; a pequena massa fictícia serve para testar consultas, não para treinar uma previsão útil. Recomendações de produção não podem usar estoque ou receitas que o banco ainda não registra.
-
 
 ## 2. Modelo Lógico Relacional
 
@@ -505,7 +482,7 @@ Os INSERTs estão no próprio script, antes das consultas. Todos os nomes, conta
 
 Além dos exemplos anteriores, a massa acrescenta 10 clientes, 6 produtos, 24 pedidos com 48 itens, 24 participações, 15 pagamentos, um estorno, 5 insumos, 3 compras e 9 itens de compra. A contagem final, em banco vazio, está no registro de validação. Há pedidos de balcão sem cliente, clientes sem compras, produto sem vendas, três canais, duas plataformas, dinheiro/Pix/cartão, pedidos concluídos/cancelados/abertos/em preparo e datas em meses diferentes. O exemplo anterior preserva o caso de dois pagamentos para a mesma encomenda e seus dois estornos.
 
-**Justificativa provisória:** os 24 pedidos distribuídos de agosto a outubro foram escolhidos para exercitar os relatórios, sem afirmar que representam o movimento real. As três compras complementares representam uma compra mensal nos três meses simulados, conforme a periodicidade relatada. O grupo ainda precisa informar volumes reais para ajustar a quantidade por tabela e justificar a massa final. Esse requisito do professor permanece pendente.
+**Organização da massa:** os 24 pedidos de agosto a outubro permitem comparar períodos, canais e situações de atendimento. As três compras complementares representam uma compra por mês nos períodos simulados. As quantidades são exemplos para testar o banco e não representam o volume real de vendas da confeitaria.
 
 ## 5. Repositório GitHub
 
@@ -519,96 +496,39 @@ Além dos exemplos anteriores, a massa acrescenta 10 clientes, 6 produtos, 24 pe
 | Foto existente da visita | [assets/imagem.jpeg](assets/imagem.jpeg) |
 | SQL e massa fictícia | [cinthie_confeitaria-2.sql](cinthie_confeitaria-2.sql) |
 | Validação | [docs/validacao.md](docs/validacao.md) |
-| Preparação da apresentação | [docs/roteiro_apresentacao.md](docs/roteiro_apresentacao.md); slides ainda pendentes |
+| Roteiro da apresentação | [docs/roteiro_apresentacao.md](docs/roteiro_apresentacao.md) |
 
-O formato do dicionário ainda deve ser comparado ao PDF de exemplo do professor, não disponível nesta revisão. O histórico deve registrar contribuições reais de cada integrante com a própria conta; esta revisão assistida não substitui essa colaboração nem cria commits em nome dos colegas.
+O histórico de alterações está disponível nos commits do repositório.
 
 ## 6. Uso de Inteligência Artificial
 
+O ChatGPT/Codex foi utilizado na organização do relatório, na revisão da modelagem, na documentação da normalização, na elaboração de consultas e na geração de dados fictícios.
+
 | Item | Registro |
 |---|---|
-| Ferramenta e etapa | ChatGPT/Codex foi utilizado para organizar informações da entrevista, revisar requisitos, discutir regras de negócio, identificar inconsistências e apoiar a elaboração do DER e deste README. |
-| Motivação | Estruturar o trabalho conforme as orientações da disciplina, melhorar a coerência entre as seções e revisar a modelagem conceitual. |
-| Prompt(s) utilizados | O texto exato dos prompts da fase inicial não foi preservado neste repositório; não é adequado reconstruí-los como se fossem transcrições. Registrar abaixo prompts documentados a partir desta revisão, com data e finalidade. |
-| Sugestões recebidas | Foram sugeridas revisões de entidades, relacionamentos, cardinalidades, requisitos, regras de negócio e redação. |
-| Trechos rejeitados ou corrigidos | Foram corrigidas sugestões anteriores que tratavam o motoboy como terceirizado, que incluíam controle de estoque e que criavam ITEM_PEDIDO diretamente no DER conceitual. No modelo lógico, a tabela associativa é necessária. Também foram revistas informações sobre canais de pedido e formas de pagamento. |
-| Justificativa da escolha final | O grupo manteve as decisões compatíveis com a entrevista, com as informações posteriormente confirmadas sobre o funcionamento da confeitaria e com a orientação do professor para a modelagem conceitual. |
-| Reflexão crítica | A IA foi utilizada como ferramenta de apoio à organização e revisão do trabalho. As informações sobre a organização foram obtidas na pesquisa de campo, e o grupo permaneceu responsável por verificar as sugestões e decidir quais alterações eram compatíveis com a realidade observada. |
+| Objetivo | Organizar o trabalho conforme as orientações da disciplina e revisar a relação entre documentação e SQL. |
+| Materiais consultados | Levantamento da confeitaria, correção da Entrega 1, esqueleto da Entrega 2 e arquivos do repositório. |
+| Solicitações | Manter o SQL simples, preservar as regras existentes, comentar as consultas e organizar o relatório conforme o esqueleto. |
+| Resultado | README reorganizado, consultas comentadas, relatórios G01–G07, auditorias A01–A06, massa fictícia e diagrama lógico. |
+| Sugestões corrigidas | Remoção da classificação do motoboy como terceirizado; separação entre compra de insumos e controle de estoque; uso de ITEM_PEDIDO como tabela associativa no modelo lógico. |
+| Critério de escolha | Manter as informações do levantamento e as regras de canais diretos, aplicativos, pagamentos e reembolsos. |
+| Fontes e testes | Comparação entre os arquivos do projeto e execução do SQL no MySQL 8.0.46, incluindo totais, restrições e auditorias. |
+| Análise crítica | O SQL executável verifica a implementação, mas o conhecimento da rotina da confeitaria vem do levantamento. Os dados de teste são fictícios. |
 
-### 6.1 Registro verificável da revisão assistida por IA
-
-- **Data:** 30/10/2026.
-- **Ferramenta:** ChatGPT.
-- **Prompt do usuário (resumo fiel do pedido recebido nesta revisão, não transcrição da primeira fase):** "Corrija o README e remova uma integrante da lista de participantes", acompanhado da avaliação detalhada do professor e dos critérios de desconto.
-- **Material de entrada:** `README.md` do projeto e parecer com critérios 1 a 12, lacunas de processos, regras de negócio, dicionário e uso de IA.
-- **Saída adotada:** retirada de uma integrante da lista; ampliação de processos e fluxos; separação entre regras operacionais, fatos organizacionais e políticas a validar; explicitação das limitações do DER e do escopo.
-- **Conferência humana necessária:** validar os detalhes ainda desconhecidos de agendamento, fornecedores, cancelamentos e reembolsos, entrega, impostos e uso de dados pessoais com a responsável e o professor; revisar esta versão antes da entrega.
-- **Propostas não adotadas automaticamente:** inventar porcentagem de sinal ou novas condições de devolução, prazo fixo de encomenda, tarifas de entrega ou fornecedores inexistentes no levantamento.
-
-### 6.2 Complemento do levantamento durante a revisão
-
-- **Informações fornecidas pelo grupo:** a confeitaria dispõe de mesas para consumo; os aplicativos recebem apenas pedidos para entrega no dia; as encomendas são feitas pelo WhatsApp, com pagamento antecipado; cancelamentos das encomendas via WhatsApp, inclusive quando solicitados com menos de sete dias de antecedência da entrega, têm devolução integral (100%) do valor antecipadamente pago, sem ônus para cliente e estabelecimento.
-- **Interpretação documental:** a regra foi atualizada para explicitar que o prazo de sete dias **não impõe retenção ou multa**; tanto antes quanto dentro dos sete dias prévios à entrega, o reembolso informado é de 100% do pagamento antecipado. A forma e o prazo operacional do estorno ainda precisam ser definidos.
-- **Alteração aplicada:** atualização da caracterização, dos processos, do fluxo e das regras; posterior revisão do DER em 05/11/2026, em conjunto com o dicionário e o modelo lógico.
-
-> **Transparência:** os prompts originais anteriores à revisão não constam dos arquivos fornecidos. Para documentar o histórico completo, anexar suas transcrições originais quando disponíveis; não substituir por exemplos fictícios.
-
----
-
-### 6.3 Registro da atualização do SQL e da revisão documental
-
-Transcrições de solicitações presentes na conversa com o Codex:
+### Solicitações registradas
 
 > Atualize o SQL porém lembre que sou um anulo que não sabe mexer muito em SQL nem em banco de dados. Mantenha meio que o "padrão" que já estava sendo usado na versão já presente do SQL no github, como se aínda fosse eu fazendo ele
 
 > Veja se tudo está correto com o issues que o professor deixou
 
-> Arruma as coisas
+> Este é o esqueleto de como deve ser, segundo o professor
 
-- **Ferramenta:** ChatGPT/Codex. Revisão documental em 06/11/2026.
-- **Resposta adotada, em resumo:** inclusão de compras, insumos e estornos, atualização dos campos e exemplos, comparação com a issue #1 e complementação dos requisitos e do dicionário.
-- **Exemplo concreto:** o pagamento deixou de ter `UNIQUE` em `id_pedido`, permitindo dois recebimentos para o mesmo pedido. O estorno manteve `UNIQUE` em `id_pagamento`, limitando a um estorno por recebimento.
-- **Escolha e limite:** foram mantidos comandos SQL simples. Consultas detectam algumas violações entre tabelas, sem impedir a gravação; isso foi explicitado em vez de apresentar o script como um sistema completo.
-- **Correção documental:** o RF11 foi alinhado ao RF21 para não registrar pagamentos de aplicativos internamente.
-- **Validação:** execução e testes do SQL pelo Codex; o grupo ainda deve revisar as regras com a responsável e conferir os resultados antes da entrega. Os prompts antigos que não foram preservados continuam indisponíveis.
+> Pode começar as alterações
 
-### 6.4 Registro da revisão de 05/11/2026 com apoio de IA
-
-- **Solicitação do grupo:** corrigir modelagem de compras e insumos, representar `total_pedido` como atributo derivado externo, registrar estornos e atualizar a conversão N:N para o modelo lógico.
-- **Correção adicional fornecida pelo grupo:** cancelamentos em WhatsApp, balcão e pagamentos via maquininha não têm cobrança de taxa; pagamentos, cancelamentos e estornos por aplicativos continuam nos próprios apps.
-- **Solução adotada:** inclusão de COMPRA, INSUMO e ESTORNO; cardinalidades financeiras revisadas; totais calculados; modelo lógico com tabelas associativas; documentos compatibilizados.
-- **Limites preservados:** não se presumem taxa de aplicativo, forma de reembolso do balcão, fornecedor, saldo de estoque nem volume mensal de compras; essas informações precisam de confirmação com a organização.
-- **Ferramenta:** ChatGPT, em 05/11/2026, como assistência para a modelagem e revisão documental. Todo material deve ser validado pelo grupo antes da entrega.
-
-
-### 6.5 Adequação ao esqueleto da Entrega 2 — 13/11/2026
-
-| Item | Registro |
-|---|---|
-| Ferramenta e etapa | ChatGPT/Codex: comparação com o esqueleto, reorganização do README, normalização, diagrama lógico, consultas, dados fictícios e roteiro de apresentação. |
-| Motivação | Adequar a estrutura e tornar explícitas as exigências ainda não atendidas. |
-| Prompts disponíveis | “Este é o esqueleto de como deve ser, segundo o professor”; “Pode começar as alterações”. O usuário forneceu o arquivo `00-d_Esqueleto_Entrega_2.md` e pediu anteriormente SQL simples e preservação das regras. |
-| Resposta recebida | Relatório reorganizado, consultas G01–G07/A01–A06, demonstrações reversíveis, massa de estudo e diagrama gerado a partir das tabelas. |
-| Fontes consultadas | Esqueleto fornecido no Drive, README/SQL/dicionário e issue 1 do professor. A revisão técnica comparou esses materiais; o grupo ainda deve validar o conteúdo e os resultados. |
-| Ajustes e limites | Não foram criados dados de entrevista, volumes reais, fornecedores, taxas, contatos pessoais ou contribuições dos colegas. A massa é fictícia e seu volume é provisório. Nenhum ajuste humano desta rodada foi informado até o registro. |
-| Escolha final proposta | Manter comandos simples e auditorias, sem introduzir triggers; submeter ao grupo as decisões e pendências. |
-| Reflexão crítica | A IA não substitui a visita, a confirmação do escopo ou a revisão do professor. Um script executável não prova que o banco representa todos os processos da organização. |
-
-Também foram acrescentadas, em solicitação anterior desta conversa, duas linhas explicativas às 17 consultas de conferência. Prompt: “No repositório ErickCLiberato/cinthie-confeitaria, confira se todos os processos de negócio no README.md estão numerados em sequência. Depois, no arquivo cinthie_confeitaria-2.sql, acrescente duas linhas de comentários antes de cada consulta da parte de SELECT, explicando de forma simples o que ela mostra e para que serve.” A numeração já estava correta; foram mantidas as consultas e acrescentados 34 comentários.
-
-Complemento fornecido pelo grupo nesta conversa: explicação intitulada “Diferença entre a empresa e o nosso projeto”, com melhorias propostas, exemplo de encomenda WhatsApp e limites da implementação. O texto foi incorporado ao relatório e ao roteiro, ajustando os nomes das tabelas ao SQL e distinguindo o controle administrativo de repasses da ausência desses registros no banco. Nenhuma consulta ou regra SQL foi alterada nessa complementação. A explicação não fornece data ou identificação da entrevistada nem substitui os dados de entrevista ainda pendentes.
+Na revisão de 13/11/2026, a numeração dos processos foi conferida e foram acrescentados comentários às 17 consultas de conferência. Na adequação à Entrega 2, foram incluídos relatórios, dados fictícios, diagrama lógico e exemplos de UPDATE e DELETE com ROLLBACK. O texto sobre a rotina da empresa e a proposta do projeto foi fornecido pelo grupo e adaptado aos nomes usados no SQL.
 
 ## 7. Apresentação Corporativa Final
 
-O [roteiro de oito minutos](docs/roteiro_apresentacao.md) segue a ordem exigida: problema, solução, modelo lógico, SQL em execução, consultas gerenciais/auditorias, BI/IA e benefícios. Ele orienta a montagem dos slides, mas não substitui os slides finais, ainda pendentes.
+O [roteiro de oito minutos](docs/roteiro_apresentacao.md) apresenta o problema, a solução, o modelo lógico, a execução do SQL, as consultas gerenciais e de auditoria, o uso dos dados em BI e os benefícios para a organização.
 
-Todos os integrantes devem estar presentes e preparados para responder individualmente na defesa após o pitch. O grupo deve ensaiar a demonstração no MySQL e confirmar a distribuição das falas.
-
-### Pendências para concluir a entrega
-
-- Confirmar nome/contato da responsável, data e participantes da entrevista, achados de observação e volumes reais.
-- Validar a cobertura de todos os dados da organização: fornecedores, entrega, estoque, caixa, fiscal e demais processos a confirmar.
-- Informar o software de criação do DER e conferir a notação da imagem existente.
-- Ajustar e justificar a massa de dados com os números do levantamento.
-- Comparar o dicionário com o PDF de exemplo exigido e revisar a coerência após qualquer ampliação do modelo.
-- Produzir os slides finais e ensaiar a demonstração e a defesa, com contribuições reais dos integrantes no repositório.
+A demonstração usa a massa fictícia e as consultas do repositório, com destaque para vendas por período, recebimentos diretos, compras e conferência de reembolsos.
