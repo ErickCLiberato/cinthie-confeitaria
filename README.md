@@ -505,24 +505,22 @@ O ChatGPT/Codex foi utilizado na organização do relatório, na revisão da mod
 
 | Item | Registro |
 |---|---|
-| Objetivo | Organizar o trabalho conforme as orientações da disciplina e revisar a relação entre documentação e SQL. |
+| Objetivo | Organizar o relatório conforme as orientações da disciplina e conferir a coerência entre a documentação e o SQL. |
 | Materiais consultados | Levantamento da confeitaria, correção da Entrega 1, esqueleto da Entrega 2 e arquivos do repositório. |
-| Solicitações | Manter o SQL simples, preservar as regras existentes, comentar as consultas e organizar o relatório conforme o esqueleto. |
+| Solicitações | Preservar o padrão do SQL e as regras existentes, documentar as consultas e organizar o relatório conforme o esqueleto da entrega. |
 | Resultado | README reorganizado, consultas comentadas, relatórios G01–G07, auditorias A01–A06, massa fictícia e diagrama lógico. |
 | Sugestões corrigidas | Remoção da classificação do motoboy como terceirizado; separação entre compra de insumos e controle de estoque; uso de ITEM_PEDIDO como tabela associativa no modelo lógico. |
 | Critério de escolha | Manter as informações do levantamento e as regras de canais diretos, aplicativos, pagamentos e reembolsos. |
 | Fontes e testes | Comparação entre os arquivos do projeto e execução do SQL no MySQL 8.0.46, incluindo totais, restrições e auditorias. |
-| Análise crítica | O SQL executável verifica a implementação, mas o conhecimento da rotina da confeitaria vem do levantamento. Os dados de teste são fictícios. |
+| Análise crítica | A execução do script permite verificar os resultados das consultas e as restrições do banco. As informações sobre a rotina da confeitaria vêm do levantamento, e os dados de teste são fictícios. |
 
-### Solicitações registradas
+### Resumo das solicitações técnicas
 
-> Atualize o SQL porém lembre que sou um anulo que não sabe mexer muito em SQL nem em banco de dados. Mantenha meio que o "padrão" que já estava sendo usado na versão já presente do SQL no github, como se aínda fosse eu fazendo ele
-
-> Veja se tudo está correto com o issues que o professor deixou
-
-> Este é o esqueleto de como deve ser, segundo o professor
-
-> Pode começar as alterações
+1. Revisar o script SQL, preservando as consultas, as regras de negócio e o padrão de comandos utilizado no projeto.
+2. Conferir a numeração dos processos de negócio e acrescentar comentários às consultas SELECT, explicando seus resultados e sua finalidade.
+3. Comparar a documentação com os apontamentos da correção da Entrega 1 e com a estrutura exigida para a Entrega 2.
+4. Conferir a correspondência entre o modelo conceitual, o modelo lógico e o script SQL, incluindo entidades, campos e cardinalidades.
+5. Revisar a redação do relatório, distinguindo a rotina atual da confeitaria, a proposta do banco de dados e as funcionalidades implementadas.
 
 Na revisão de 13/11/2026, a numeração dos processos foi conferida e foram acrescentados comentários às 17 consultas de conferência. Na adequação à Entrega 2, foram incluídos relatórios, dados fictícios, diagrama lógico e exemplos de UPDATE e DELETE com ROLLBACK. O texto sobre a rotina da empresa e a proposta do projeto foi fornecido pelo grupo e adaptado aos nomes usados no SQL.
 
