@@ -250,9 +250,15 @@ INSERT IGNORE INTO compra_insumo (id_compra, id_insumo, quantidade, custo_unitar
 VALUES (@id_compra_teste, @id_insumo_teste, 2.500, 6.00);
 
 -- CONSULTAS DE CONFERÊNCIA (SELECT)
+-- Mostra todos os clientes cadastrados, com nome e telefone.
+-- Serve para conferir os dados de contato dos clientes.
 SELECT * FROM cliente;
+-- Mostra os produtos cadastrados em ordem de nome.
+-- Serve para consultar o cardápio e os preços atuais.
 SELECT * FROM produto ORDER BY nome_produto;
 
+-- Mostra os pedidos com cliente, datas, canal, plataforma e situação, dos mais recentes aos mais antigos.
+-- Serve para acompanhar os pedidos, inclusive os que não têm cliente cadastrado.
 SELECT p.id_pedido, c.nome_cliente AS cliente, p.data_hora_pedido,
        p.data_prevista_atendimento, p.canal_pedido, pl.nome_plataforma,
        p.status_pedido
@@ -261,33 +267,47 @@ LEFT JOIN cliente c ON p.id_cliente = c.id_cliente
 LEFT JOIN plataforma pl ON p.id_plataforma = pl.id_plataforma
 ORDER BY p.data_hora_pedido DESC;
 
+-- Mostra os produtos de cada pedido, com quantidade, preço unitário e subtotal.
+-- Serve para conferir os itens e o valor de cada um no pedido.
 SELECT co.id_pedido, pr.nome_produto, co.quantidade, co.preco_unitario,
        (co.quantidade * co.preco_unitario) AS subtotal
 FROM item_pedido co
 JOIN produto pr ON co.id_produto = pr.id_produto
 ORDER BY co.id_pedido;
 
+-- Mostra o valor total de cada pedido, somando os subtotais dos itens.
+-- Serve para conferir o total usando os preços registrados na venda.
 SELECT p.id_pedido,
        COALESCE(SUM(co.quantidade * co.preco_unitario), 0) AS total_pedido
 FROM pedido p
 LEFT JOIN item_pedido co ON p.id_pedido = co.id_pedido
 GROUP BY p.id_pedido;
 
+-- Mostra os funcionários que participam de cada pedido e o papel de cada um.
+-- Serve para conferir quem ficou responsável pelas atividades do pedido.
 SELECT p.id_pedido, f.nome_funcionario AS funcionario, pp.papel_participacao
 FROM pedido_funcionario pp
 JOIN funcionario f ON pp.id_funcionario = f.id_funcionario
 JOIN pedido p ON pp.id_pedido = p.id_pedido
 ORDER BY p.id_pedido, f.nome_funcionario;
 
+-- Mostra os pagamentos registrados, dos mais recentes aos mais antigos.
+-- Serve para conferir os valores recebidos e as formas de pagamento.
 SELECT * FROM pagamento ORDER BY data_pagamento DESC;
 
+-- Mostra a quantidade de pedidos de cada canal de venda.
+-- Serve para comparar quantos pedidos vieram do WhatsApp, balcão e plataformas.
 SELECT canal_pedido, COUNT(*) AS quantidade_pedidos
 FROM pedido GROUP BY canal_pedido;
 
+-- Mostra os estornos, com o pagamento, o pedido e o valor devolvido.
+-- Serve para conferir as devoluções registradas nos pagamentos diretos.
 SELECT e.id_estorno, pg.id_pedido, e.id_pagamento, e.valor_estornado
 FROM estorno e
 JOIN pagamento pg ON e.id_pagamento = pg.id_pagamento;
 
+-- Mostra os insumos de cada compra, com unidade, quantidade, custo unitário e subtotal.
+-- Serve para conferir os ingredientes comprados e o custo de cada item.
 SELECT c.id_compra, c.data_compra, i.nome_insumo, i.unidade_medida,
        ci.quantidade, ci.custo_unitario,
        ci.quantidade * ci.custo_unitario AS subtotal_compra
@@ -295,6 +315,8 @@ FROM compra c
 JOIN compra_insumo ci ON c.id_compra = ci.id_compra
 JOIN insumo i ON ci.id_insumo = i.id_insumo;
 
+-- Mostra o valor total de cada compra, somando os subtotais dos insumos.
+-- Serve para conferir o gasto registrado em cada compra.
 SELECT c.id_compra, COALESCE(SUM(ci.quantidade * ci.custo_unitario), 0) AS total_compra
 FROM compra c
 LEFT JOIN compra_insumo ci ON c.id_compra = ci.id_compra
@@ -306,16 +328,22 @@ GROUP BY c.id_compra;
 -- Antes de usar dados reais, essas regras também precisam ser validadas no cadastro.
 
 -- Pedidos de aplicativo não podem ter pagamentos internos.
+-- Mostra os pagamentos internos ligados a pedidos de aplicativo.
+-- Serve para encontrar registros que não deveriam existir, pois o aplicativo cuida do pagamento.
 SELECT pg.id_pagamento, pg.id_pedido
 FROM pagamento pg JOIN pedido p ON pg.id_pedido = p.id_pedido
 WHERE p.canal_pedido = 'PLATAFORMA';
 
 -- Um estorno não pode superar o pagamento original.
+-- Mostra os estornos com valor maior que o pagamento original.
+-- Serve para encontrar devoluções registradas acima do valor recebido.
 SELECT e.id_estorno FROM estorno e
 JOIN pagamento pg ON e.id_pagamento = pg.id_pagamento
 WHERE e.valor_estornado > pg.valor_pago;
 
 -- Cada recebimento de encomenda WhatsApp cancelada deve ser devolvido integralmente.
+-- Mostra os pagamentos de encomendas WhatsApp canceladas sem estorno ou com valor devolvido diferente do pago.
+-- Serve para conferir se cada pagamento dessas encomendas foi devolvido integralmente.
 SELECT pg.id_pagamento, pg.valor_pago, e.valor_estornado
 FROM pedido p JOIN pagamento pg ON p.id_pedido = pg.id_pedido
 LEFT JOIN estorno e ON pg.id_pagamento = e.id_pagamento
@@ -324,13 +352,19 @@ WHERE p.canal_pedido = 'WHATSAPP' AND p.tipo_pedido = 'ENCOMENDA'
   AND (e.id_estorno IS NULL OR e.valor_estornado <> pg.valor_pago);
 
 -- Todo pedido deve ter itens e toda compra deve ter insumos.
+-- Mostra os pedidos que não têm nenhum item registrado.
+-- Serve para encontrar pedidos que precisam ter seus produtos conferidos.
 SELECT p.id_pedido FROM pedido p
 WHERE NOT EXISTS (SELECT 1 FROM item_pedido ip WHERE ip.id_pedido = p.id_pedido);
+-- Mostra as compras que não têm nenhum insumo registrado.
+-- Serve para encontrar compras que precisam ter seus itens conferidos.
 SELECT c.id_compra FROM compra c
 WHERE NOT EXISTS (SELECT 1 FROM compra_insumo ci WHERE ci.id_compra = c.id_compra);
 
 -- Encomendas WhatsApp e pedidos diretos concluídos devem estar pagos integralmente.
 -- Somamos pagamentos e itens separadamente para não multiplicar os valores no JOIN.
+-- Mostra pedidos diretos não cancelados com pagamento diferente do total: encomendas WhatsApp ou pedidos concluídos.
+-- Serve para conferir o pagamento integral exigido nesses casos; a consulta apenas aponta diferenças.
 SELECT p.id_pedido FROM pedido p
 WHERE p.canal_pedido IN ('WHATSAPP','BALCAO') AND p.status_pedido <> 'CANCELADO'
   AND (p.status_pedido = 'CONCLUIDO' OR
