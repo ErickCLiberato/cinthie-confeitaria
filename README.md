@@ -529,3 +529,11 @@ Na revisão de 13/11/2026, a numeração dos processos foi conferida e foram acr
 A apresentação de oito minutos aborda o problema, a solução, o modelo lógico, a execução do SQL, as consultas gerenciais e de auditoria, o uso dos dados em BI e os benefícios para a organização.
 
 A demonstração usa a massa fictícia e as consultas do repositório, com destaque para vendas por período, recebimentos diretos, compras e conferência de reembolsos.
+
+### Considerações finais
+
+Com este projeto, compreendemos melhor a organização dos processos de uma empresa e como a tecnologia pode apoiar suas atividades administrativas.
+
+Além de desenvolver o modelo conceitual, elaboramos o modelo lógico, o dicionário de dados e a implementação do banco em SQL.
+
+O trabalho nos ajudou a relacionar as informações obtidas no levantamento com as tabelas, os campos e as regras do banco, transformando uma situação real em uma estrutura organizada de dados.
