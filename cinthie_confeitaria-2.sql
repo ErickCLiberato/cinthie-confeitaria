@@ -249,6 +249,170 @@ SET @id_compra_teste = (SELECT id_compra FROM compra WHERE data_compra = '2026-1
 INSERT IGNORE INTO compra_insumo (id_compra, id_insumo, quantidade, custo_unitario)
 VALUES (@id_compra_teste, @id_insumo_teste, 2.500, 6.00);
 
+-- MASSA DIDÁTICA COMPLEMENTAR: dados totalmente fictícios.
+-- IDs a partir de 10001 identificam os exemplos; execute somente no banco de estudo.
+-- O volume real ainda precisa ser confirmado. Estes números não descrevem a empresa.
+-- INSERT IGNORE evita repetir os mesmos IDs; não corrige dados já cadastrados.
+INSERT IGNORE INTO cliente (id_cliente, nome_cliente, telefone_cliente) VALUES
+(10001, 'Cliente fictício 01', 'CONTATO-FICTICIO-01'),
+(10002, 'Cliente fictício 02', 'CONTATO-FICTICIO-02'),
+(10003, 'Cliente fictício 03', 'CONTATO-FICTICIO-03'),
+(10004, 'Cliente fictício 04', 'CONTATO-FICTICIO-04'),
+(10005, 'Cliente fictício 05', 'CONTATO-FICTICIO-05'),
+(10006, 'Cliente fictício 06', 'CONTATO-FICTICIO-06'),
+(10007, 'Cliente fictício 07', 'CONTATO-FICTICIO-07'),
+(10008, 'Cliente fictício 08', 'CONTATO-FICTICIO-08'),
+(10009, 'Cliente fictício 09', 'CONTATO-FICTICIO-09'),
+(10010, 'Cliente fictício 10', 'CONTATO-FICTICIO-10');
+
+INSERT IGNORE INTO produto (id_produto, nome_produto, preco_produto) VALUES
+(10001, 'Brigadeiro - fictício', 5.00),
+(10002, 'Brownie - fictício', 8.00),
+(10003, 'Fatia de bolo - fictício', 12.00),
+(10004, 'Bolo pequeno - fictício', 45.00),
+(10005, 'Torta - fictícia', 60.00),
+(10006, 'Doce sem vendas - fictício', 9.00);
+
+INSERT IGNORE INTO insumo (id_insumo, nome_insumo, unidade_medida) VALUES
+(10001, 'Açúcar - fictício', 'kg'),
+(10002, 'Chocolate - fictício', 'kg'),
+(10003, 'Ovos - fictícios', 'unidade'),
+(10004, 'Leite - fictício', 'litro'),
+(10005, 'Manteiga - fictícia', 'kg');
+
+-- Três compras fictícias, uma em cada mês, para demonstrar relatórios por período.
+INSERT IGNORE INTO compra (id_compra, data_compra) VALUES
+(10001, '2026-08-01'), (10002, '2026-09-01'), (10003, '2026-10-01');
+INSERT IGNORE INTO compra_insumo
+(id_compra, id_insumo, quantidade, custo_unitario) VALUES
+(10001, 10001, 10.000, 4.00), (10001, 10002, 4.000, 25.00),
+(10001, 10003, 60.000, 0.80), (10002, 10001, 12.000, 4.20),
+(10002, 10004, 20.000, 5.00), (10002, 10005, 3.000, 30.00),
+(10003, 10002, 5.000, 26.00), (10003, 10003, 90.000, 0.85),
+(10003, 10004, 24.000, 5.20);
+
+INSERT IGNORE INTO pedido (id_pedido, id_cliente, id_plataforma, data_hora_pedido, data_prevista_atendimento, data_hora_cancelamento, status_pedido, canal_pedido, tipo_pedido, modalidade_atendimento) VALUES
+(10001, NULL, NULL, '2026-08-02 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10002, 10002, NULL, '2026-08-05 10:00:00', '2026-08-05 17:00:00', '2026-08-05 11:00:00', 'CANCELADO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10003, 10003, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'iFood'), '2026-08-08 10:00:00', NULL, NULL, 'CONCLUIDO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10004, 10004, NULL, '2026-08-11 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10005, 10005, NULL, '2026-08-14 10:00:00', '2026-08-14 17:00:00', NULL, 'CONCLUIDO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10006, 10006, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'Keeta'), '2026-08-17 10:00:00', NULL, NULL, 'CONCLUIDO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10007, NULL, NULL, '2026-08-20 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10008, 10008, NULL, '2026-08-23 10:00:00', '2026-08-23 17:00:00', NULL, 'CONCLUIDO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10009, 10001, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'iFood'), '2026-09-02 10:00:00', NULL, '2026-09-02 11:00:00', 'CANCELADO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10010, 10002, NULL, '2026-09-05 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10011, 10003, NULL, '2026-09-08 10:00:00', '2026-09-08 17:00:00', NULL, 'CONCLUIDO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10012, 10004, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'Keeta'), '2026-09-11 10:00:00', NULL, NULL, 'CONCLUIDO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10013, NULL, NULL, '2026-09-14 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10014, 10006, NULL, '2026-09-17 10:00:00', '2026-09-17 17:00:00', NULL, 'CONCLUIDO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10015, 10007, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'iFood'), '2026-09-20 10:00:00', NULL, '2026-09-20 11:00:00', 'CANCELADO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10016, 10008, NULL, '2026-09-23 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10017, 10001, NULL, '2026-10-02 10:00:00', '2026-10-02 17:00:00', NULL, 'CONCLUIDO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10018, 10002, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'Keeta'), '2026-10-05 10:00:00', NULL, NULL, 'CONCLUIDO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10019, NULL, NULL, '2026-10-08 10:00:00', NULL, NULL, 'CONCLUIDO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10020, 10004, NULL, '2026-10-11 10:00:00', '2026-10-11 17:00:00', NULL, 'CONCLUIDO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10021, 10005, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'iFood'), '2026-10-14 10:00:00', NULL, NULL, 'CONCLUIDO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA'),
+(10022, 10006, NULL, '2026-10-17 10:00:00', NULL, NULL, 'ABERTO', 'BALCAO', 'IMEDIATO', 'CONSUMO_LOCAL'),
+(10023, 10007, NULL, '2026-10-20 10:00:00', '2026-10-20 17:00:00', NULL, 'EM_PREPARO', 'WHATSAPP', 'ENCOMENDA', 'RETIRADA'),
+(10024, 10008, (SELECT id_plataforma FROM plataforma WHERE nome_plataforma = 'Keeta'), '2026-10-23 10:00:00', NULL, NULL, 'CONCLUIDO', 'PLATAFORMA', 'IMEDIATO', 'ENTREGA');
+
+INSERT IGNORE INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES
+(10001, 10001, 2, 5.00),
+(10001, 10002, 1, 8.00),
+(10002, 10002, 3, 8.00),
+(10002, 10003, 1, 12.00),
+(10003, 10003, 1, 12.00),
+(10003, 10004, 1, 45.00),
+(10004, 10004, 2, 45.00),
+(10004, 10005, 1, 60.00),
+(10005, 10005, 3, 60.00),
+(10005, 10001, 1, 5.00),
+(10006, 10001, 1, 5.00),
+(10006, 10002, 1, 8.00),
+(10007, 10002, 2, 8.00),
+(10007, 10003, 1, 12.00),
+(10008, 10003, 3, 12.00),
+(10008, 10004, 1, 45.00),
+(10009, 10004, 1, 45.00),
+(10009, 10005, 1, 60.00),
+(10010, 10005, 2, 60.00),
+(10010, 10001, 1, 5.00),
+(10011, 10001, 3, 5.00),
+(10011, 10002, 1, 8.00),
+(10012, 10002, 1, 8.00),
+(10012, 10003, 1, 12.00),
+(10013, 10003, 2, 12.00),
+(10013, 10004, 1, 45.00),
+(10014, 10004, 3, 45.00),
+(10014, 10005, 1, 60.00),
+(10015, 10005, 1, 60.00),
+(10015, 10001, 1, 5.00),
+(10016, 10001, 2, 5.00),
+(10016, 10002, 1, 8.00),
+(10017, 10002, 3, 8.00),
+(10017, 10003, 1, 12.00),
+(10018, 10003, 1, 12.00),
+(10018, 10004, 1, 45.00),
+(10019, 10004, 2, 45.00),
+(10019, 10005, 1, 60.00),
+(10020, 10005, 3, 60.00),
+(10020, 10001, 1, 5.00),
+(10021, 10001, 1, 5.00),
+(10021, 10002, 1, 8.00),
+(10022, 10002, 2, 8.00),
+(10022, 10003, 1, 12.00),
+(10023, 10003, 3, 12.00),
+(10023, 10004, 1, 45.00),
+(10024, 10004, 1, 45.00),
+(10024, 10005, 1, 60.00);
+
+INSERT IGNORE INTO pedido_funcionario (id_funcionario, id_pedido, papel_participacao) VALUES
+(@id_funcionario_teste, 10001, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10002, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10003, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10004, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10005, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10006, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10007, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10008, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10009, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10010, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10011, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10012, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10013, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10014, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10015, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10016, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10017, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10018, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10019, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10020, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10021, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10022, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10023, 'ATENDIMENTO E PRODUCAO'),
+(@id_funcionario_teste, 10024, 'ATENDIMENTO E PRODUCAO');
+
+INSERT IGNORE INTO pagamento (id_pagamento, id_pedido, data_pagamento, forma_pagamento, valor_pago) VALUES
+(10001, 10001, '2026-08-02 10:05:00', 'PIX', 18.00),
+(10002, 10002, '2026-08-05 10:05:00', 'CARTAO', 36.00),
+(10004, 10004, '2026-08-11 10:05:00', 'PIX', 150.00),
+(10005, 10005, '2026-08-14 10:05:00', 'CARTAO', 185.00),
+(10007, 10007, '2026-08-20 10:05:00', 'PIX', 28.00),
+(10008, 10008, '2026-08-23 10:05:00', 'CARTAO', 81.00),
+(10010, 10010, '2026-09-05 10:05:00', 'PIX', 125.00),
+(10011, 10011, '2026-09-08 10:05:00', 'CARTAO', 23.00),
+(10013, 10013, '2026-09-14 10:05:00', 'PIX', 69.00),
+(10014, 10014, '2026-09-17 10:05:00', 'CARTAO', 195.00),
+(10016, 10016, '2026-09-23 10:05:00', 'PIX', 18.00),
+(10017, 10017, '2026-10-02 10:05:00', 'CARTAO', 36.00),
+(10019, 10019, '2026-10-08 10:05:00', 'PIX', 150.00),
+(10020, 10020, '2026-10-11 10:05:00', 'CARTAO', 185.00),
+(10023, 10023, '2026-10-20 10:05:00', 'CARTAO', 81.00);
+
+INSERT IGNORE INTO estorno (id_estorno, id_pagamento, data_estorno, valor_estornado) VALUES
+(10002, 10002, '2026-08-05 11:05:00', 36.00);
+
 -- CONSULTAS DE CONFERÊNCIA (SELECT)
 -- Mostra todos os clientes cadastrados, com nome e telefone.
 -- Serve para conferir os dados de contato dos clientes.
@@ -322,12 +486,123 @@ FROM compra c
 LEFT JOIN compra_insumo ci ON c.id_compra = ci.id_compra
 GROUP BY c.id_compra;
 
+-- EXEMPLOS DE UPDATE E DELETE
+-- A transação desfaz os exemplos ao final, preservando os dados de estudo.
+-- Execute o bloco inteiro, de START TRANSACTION até ROLLBACK.
+START TRANSACTION;
+
+-- Altera a descrição de um produto fictício para demonstrar uma atualização com filtro.
+-- O ROLLBACK abaixo desfaz esta mudança; os preços históricos dos pedidos não mudam.
+UPDATE produto
+SET descricao_produto = 'Descrição de exemplo para a apresentação'
+WHERE id_produto = 10006 AND nome_produto = 'Doce sem vendas - fictício';
+
+-- Mostra a descrição alterada dentro da transação.
+-- Serve para conferir o resultado do UPDATE antes de desfazê-lo.
+SELECT id_produto, nome_produto, descricao_produto
+FROM produto WHERE id_produto = 10006;
+
+-- Remove somente o produto fictício sem venda e sem vínculo com itens de pedido.
+-- O ROLLBACK restaura o produto; pedidos e pagamentos não são apagados.
+DELETE FROM produto
+WHERE id_produto = 10006 AND nome_produto = 'Doce sem vendas - fictício'
+  AND NOT EXISTS (SELECT 1 FROM item_pedido WHERE id_produto = 10006);
+
+-- Mostra se o produto fictício ainda existe após o DELETE.
+-- Serve para conferir a exclusão temporária; neste ponto deve retornar zero linhas.
+SELECT id_produto, nome_produto FROM produto WHERE id_produto = 10006;
+
+ROLLBACK;
+
+-- CONSULTAS GERENCIAIS
+-- GROUP BY reúne linhas por mês, canal ou produto; SUM soma e COUNT conta.
+-- DATE_FORMAT exibe ano e mês; ROUND arredonda o resultado.
+-- Em G03, UNION ALL reúne entradas e devoluções antes de calcular o saldo.
+-- G01 — Qual é o valor dos pedidos concluídos e o ticket médio por mês?
+-- Atende: P1, KPI01 e KPI02; soma vendas concluídas, não o caixa recebido.
+SELECT DATE_FORMAT(p.data_hora_pedido, '%Y-%m') AS mes,
+       COUNT(DISTINCT p.id_pedido) AS pedidos_concluidos,
+       SUM(ip.quantidade * ip.preco_unitario) AS valor_vendas,
+       ROUND(SUM(ip.quantidade * ip.preco_unitario) / COUNT(DISTINCT p.id_pedido), 2) AS ticket_medio
+FROM pedido p JOIN item_pedido ip ON p.id_pedido = ip.id_pedido
+WHERE p.status_pedido = 'CONCLUIDO'
+GROUP BY DATE_FORMAT(p.data_hora_pedido, '%Y-%m')
+ORDER BY mes;
+
+-- G02 — Quanto foi vendido por mês, canal e plataforma?
+-- Atende: P1 e KPI03; ajuda a comparar a origem das vendas concluídas.
+SELECT DATE_FORMAT(p.data_hora_pedido, '%Y-%m') AS mes,
+       p.canal_pedido, pl.nome_plataforma,
+       COUNT(DISTINCT p.id_pedido) AS quantidade_pedidos,
+       SUM(ip.quantidade * ip.preco_unitario) AS valor_vendas
+FROM pedido p JOIN item_pedido ip ON p.id_pedido = ip.id_pedido
+LEFT JOIN plataforma pl ON p.id_plataforma = pl.id_plataforma
+WHERE p.status_pedido = 'CONCLUIDO'
+GROUP BY DATE_FORMAT(p.data_hora_pedido, '%Y-%m'), p.canal_pedido, pl.nome_plataforma
+ORDER BY mes, p.canal_pedido, pl.nome_plataforma;
+
+-- G03 — Quanto entrou e foi devolvido nos canais diretos em cada mês?
+-- Atende: P2 e KPI04; o saldo é recebimentos menos estornos, sem repasses ou despesas.
+SELECT mes, SUM(recebido) AS total_recebido, SUM(devolvido) AS total_devolvido,
+       SUM(recebido) - SUM(devolvido) AS saldo_recebimentos_diretos
+FROM (
+  SELECT DATE_FORMAT(pg.data_pagamento, '%Y-%m') AS mes,
+         pg.valor_pago AS recebido, 0 AS devolvido
+  FROM pagamento pg JOIN pedido p ON pg.id_pedido = p.id_pedido
+  WHERE p.canal_pedido IN ('WHATSAPP','BALCAO')
+  UNION ALL
+  SELECT DATE_FORMAT(e.data_estorno, '%Y-%m') AS mes,
+         0 AS recebido, e.valor_estornado AS devolvido
+  FROM estorno e JOIN pagamento pg ON e.id_pagamento = pg.id_pagamento
+  JOIN pedido p ON pg.id_pedido = p.id_pedido
+  WHERE p.canal_pedido IN ('WHATSAPP','BALCAO')
+) movimentos
+GROUP BY mes ORDER BY mes;
+
+-- G04 — Quais produtos venderam mais em cada mês?
+-- Atende: P1; mostra quantidades e valores dos itens de pedidos concluídos.
+SELECT DATE_FORMAT(p.data_hora_pedido, '%Y-%m') AS mes, pr.nome_produto,
+       SUM(ip.quantidade) AS unidades_vendidas,
+       SUM(ip.quantidade * ip.preco_unitario) AS valor_vendas
+FROM pedido p JOIN item_pedido ip ON p.id_pedido = ip.id_pedido
+JOIN produto pr ON ip.id_produto = pr.id_produto
+WHERE p.status_pedido = 'CONCLUIDO'
+GROUP BY DATE_FORMAT(p.data_hora_pedido, '%Y-%m'), pr.id_produto, pr.nome_produto
+ORDER BY mes, unidades_vendidas DESC, pr.nome_produto;
+
+-- G05 — Qual é o percentual de pedidos cancelados por mês de origem?
+-- Atende: P2 e KPI05; compara cancelados com todos os pedidos criados no mês.
+SELECT DATE_FORMAT(data_hora_pedido, '%Y-%m') AS mes,
+       COUNT(*) AS pedidos,
+       SUM(CASE WHEN status_pedido = 'CANCELADO' THEN 1 ELSE 0 END) AS cancelados,
+       ROUND(100.0 * SUM(CASE WHEN status_pedido = 'CANCELADO' THEN 1 ELSE 0 END) / COUNT(*), 2) AS percentual_cancelado
+FROM pedido
+GROUP BY DATE_FORMAT(data_hora_pedido, '%Y-%m') ORDER BY mes;
+
+-- G06 — Qual é o gasto com insumos comprados em cada mês?
+-- Atende: P3 e KPI06; mede compras, sem calcular estoque, consumo ou lucro.
+SELECT DATE_FORMAT(c.data_compra, '%Y-%m') AS mes,
+       COUNT(DISTINCT c.id_compra) AS quantidade_compras,
+       SUM(ci.quantidade * ci.custo_unitario) AS gasto_com_insumos
+FROM compra c JOIN compra_insumo ci ON c.id_compra = ci.id_compra
+GROUP BY DATE_FORMAT(c.data_compra, '%Y-%m') ORDER BY mes;
+
+-- G07 — Quais encomendas ainda precisam ser preparadas ou atendidas?
+-- Atende: P1; organiza as encomendas abertas ou em preparo pela data prevista.
+SELECT p.id_pedido, c.nome_cliente, p.data_prevista_atendimento,
+       p.modalidade_atendimento, p.status_pedido
+FROM pedido p LEFT JOIN cliente c ON p.id_cliente = c.id_cliente
+WHERE p.tipo_pedido = 'ENCOMENDA' AND p.status_pedido IN ('ABERTO','EM_PREPARO')
+ORDER BY p.data_prevista_atendimento, p.id_pedido;
+
 -- CONFERÊNCIA DAS REGRAS ENTRE TABELAS
 -- CHECK verifica a própria linha. Estas consultas verificam outras tabelas.
 -- Elas devem retornar zero linhas nos exemplos abaixo. Não impedem gravações.
 -- Antes de usar dados reais, essas regras também precisam ser validadas no cadastro.
 
 -- Pedidos de aplicativo não podem ter pagamentos internos.
+-- A01 — Há pagamento interno de pedido de aplicativo?
+-- Verifica: RN11.
 -- Mostra os pagamentos internos ligados a pedidos de aplicativo.
 -- Serve para encontrar registros que não deveriam existir, pois o aplicativo cuida do pagamento.
 SELECT pg.id_pagamento, pg.id_pedido
@@ -335,6 +610,8 @@ FROM pagamento pg JOIN pedido p ON pg.id_pedido = p.id_pedido
 WHERE p.canal_pedido = 'PLATAFORMA';
 
 -- Um estorno não pode superar o pagamento original.
+-- A02 — Algum estorno é maior que o pagamento?
+-- Verifica: RN21.
 -- Mostra os estornos com valor maior que o pagamento original.
 -- Serve para encontrar devoluções registradas acima do valor recebido.
 SELECT e.id_estorno FROM estorno e
@@ -342,6 +619,8 @@ JOIN pagamento pg ON e.id_pagamento = pg.id_pagamento
 WHERE e.valor_estornado > pg.valor_pago;
 
 -- Cada recebimento de encomenda WhatsApp cancelada deve ser devolvido integralmente.
+-- A03 — Falta devolver integralmente algum pagamento de encomenda WhatsApp cancelada?
+-- Verifica: RN20.
 -- Mostra os pagamentos de encomendas WhatsApp canceladas sem estorno ou com valor devolvido diferente do pago.
 -- Serve para conferir se cada pagamento dessas encomendas foi devolvido integralmente.
 SELECT pg.id_pagamento, pg.valor_pago, e.valor_estornado
@@ -352,10 +631,14 @@ WHERE p.canal_pedido = 'WHATSAPP' AND p.tipo_pedido = 'ENCOMENDA'
   AND (e.id_estorno IS NULL OR e.valor_estornado <> pg.valor_pago);
 
 -- Todo pedido deve ter itens e toda compra deve ter insumos.
+-- A04 — Existe pedido sem item?
+-- Verifica: RN05.
 -- Mostra os pedidos que não têm nenhum item registrado.
 -- Serve para encontrar pedidos que precisam ter seus produtos conferidos.
 SELECT p.id_pedido FROM pedido p
 WHERE NOT EXISTS (SELECT 1 FROM item_pedido ip WHERE ip.id_pedido = p.id_pedido);
+-- A05 — Existe compra sem insumo?
+-- Verifica: RN25.
 -- Mostra as compras que não têm nenhum insumo registrado.
 -- Serve para encontrar compras que precisam ter seus itens conferidos.
 SELECT c.id_compra FROM compra c
@@ -363,6 +646,8 @@ WHERE NOT EXISTS (SELECT 1 FROM compra_insumo ci WHERE ci.id_compra = c.id_compr
 
 -- Encomendas WhatsApp e pedidos diretos concluídos devem estar pagos integralmente.
 -- Somamos pagamentos e itens separadamente para não multiplicar os valores no JOIN.
+-- A06 — Existe encomenda WhatsApp ou pedido direto concluído sem pagamento integral?
+-- Verifica: RN09, RN19 e RN29.
 -- Mostra pedidos diretos não cancelados com pagamento diferente do total: encomendas WhatsApp ou pedidos concluídos.
 -- Serve para conferir o pagamento integral exigido nesses casos; a consulta apenas aponta diferenças.
 SELECT p.id_pedido FROM pedido p
