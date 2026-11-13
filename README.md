@@ -12,7 +12,7 @@ Modelo lógico, implementação SQL e apresentação final — Modelagem de Banc
 |---|---|---|
 | Douglas Lourenço de Lima | 47892919 | [Douglastail](https://github.com/Douglastail) |
 | Erick Costa Liberato | 48201693 | ErickCLiberato |
-| João Lucas Moreira dos Reis | 48162086 | A confirmar pelo grupo |
+| João Lucas Moreira dos Reis | 48162086 | [JoaoReeis](https://github.com/JoaoReeis) |
 | Nicolas Nogueira Borges | 48329266 | [nogueiranicolas95-bot](https://github.com/nogueiranicolas95-bot) |
 
 ### 1.1 Revisão do Modelo Conceitual
@@ -608,7 +608,7 @@ Todos os integrantes devem estar presentes e preparados para responder individua
 
 - Confirmar nome/contato da responsável, data e participantes da entrevista, achados de observação e volumes reais.
 - Validar a cobertura de todos os dados da organização: fornecedores, entrega, estoque, caixa, fiscal e demais processos a confirmar.
-- Informar o usuário do GitHub de João Lucas Moreira dos Reis e o software de criação do DER; conferir a notação da imagem existente.
+- Informar o software de criação do DER e conferir a notação da imagem existente.
 - Ajustar e justificar a massa de dados com os números do levantamento.
 - Comparar o dicionário com o PDF de exemplo exigido e revisar a coerência após qualquer ampliação do modelo.
 - Produzir os slides finais e ensaiar a demonstração e a defesa, com contribuições reais dos integrantes no repositório.
